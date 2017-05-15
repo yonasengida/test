@@ -14,7 +14,7 @@ var moment  = require('moment');
 var Profile        = require('../models/profile');
 
 var population = [{
-  path: 'Profile'
+  path: 'profile'
 }];
 
 /**

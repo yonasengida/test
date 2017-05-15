@@ -10,6 +10,12 @@ var ProfileDal    = require('../dal/profile');
 var StaffDal      = require('../dal/staff');
 var UserDal       = require('../dal/user');
 
+// no operation(noop) function
+exports.noop = function noop(req, res, next) {
+  res.json({
+    message: 'To Implemented!'
+  });
+};
 /**
  * Validate Users
  */
@@ -64,36 +70,35 @@ exports.validateUser = function validateUser(req, res, next, id) {
  * @param {next} middlware dispatcher
  * 
  */
-
 exports.createUser = function createUser(req, res, next) {
+  console.log('hello');
   debug('create user');
 
   var workflow = new events.EventEmitter();
   var body = req.body;
-
-
   workflow.on('validateUser', function validateUser() {
     debug('validate user');
     // Validate User Data
 
     req.checkBody('user_name', 'User Name  should not be empty!')
       .notEmpty();
-
     //  //req.assert('password', '6 to 20 characters required').len(6, 20);
     req.checkBody('password')
       .notEmpty().withMessage('password should not be empty')
       .len(6, 20).withMessage('6 to 20 characters required');
 
     req.checkBody('first_name', 'First Name Should not be empty!')
-      .notEmpty().withMessage('Should not be Empty');
+      .notEmpty().withMessage('First Name Should not be Empty');
     req.checkBody('last_name')
-      .notEmpty().withMessage('Should not be Empty');
+      .notEmpty().withMessage('Last Name Should not be Empty');
     req.checkBody('user_type', 'User Type is Invalid!')
       .notEmpty().withMessage('User Type should not be Empty')
 
       .isIn(['staff', 'customer']).withMessage('User Type should either be customer or staff');
-
-
+    if(body.user_type==='customer'){
+      req.checkBody('mobile')
+      .notEmpty().withMessage('Mobile Should not be Empty');
+    }
     var validationErrors = req.validationErrors();
 
     if (validationErrors) {
@@ -102,16 +107,14 @@ exports.createUser = function createUser(req, res, next) {
 
     } else {
       workflow.emit('checkUserExist');
-
     }
-
   });
   /**
    * Check for user exist or not
    */
   workflow.on('checkUserExist', function checkUserExist() {
+    
     var user_name = body.user_name;
-
     // Query DB for a user with the given ID
     UserDal.get({ user_name: user_name }, function cb(err, user) {
       if (err) {
@@ -157,12 +160,8 @@ exports.createUser = function createUser(req, res, next) {
   workflow.on('createProfile', function createProfile(user) {
     debug('Creating Profile');
     // Create Profile
-    ProfileDal.create({
-      user: user._id,
-      first_name: body.first_name,
-      last_name: body.last_name,
-      email: body.email
-    }, function callback(err, profile) {
+    body.user=user._id;
+    ProfileDal.create(body, function callback(err, profile) {
       if (err) {
         return next(err);
       }
@@ -329,12 +328,6 @@ exports.getUsers = function getUsers(req, res, next) {
 };
 
 
-// no operation(noop) function
-exports.noop = function noop(req, res, next) {
-  res.json({
-    message: 'To Implemented!'
-  });
-};
 
 exports.passwordChange = function passwordChange(req, res, next) {
   var body = req.body;

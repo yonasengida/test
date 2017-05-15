@@ -24,6 +24,6 @@ job_category:[{type:Schema.Types.ObjectId, ref:'JobCategory'}]
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at'}
 });
 // add middleware to support pagination
-UserSchema.plugin(paginator);
+CustomerSchema.plugin(paginator);
 // Expose the User Model
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Customer', CustomerSchema);

@@ -17,14 +17,15 @@ const config    = require('../config');
 var Schema = mongoose.Schema;
 
 // New Customer Schema Instance
-var VacancySchema = new Schema({
+var StaffSchema = new Schema({
 
     
-},{versionKey: false},{
+},{versionKey: false},
+{
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at'}
 });
 
 // add middleware to support pagination
-UserSchema.plugin(paginator);
+StaffSchema.plugin(paginator);
 // Expose the User Model
-module.exports = mongoose.model('Vacancy', VacancySchema);
+module.exports = mongoose.model('Staff', StaffSchema);

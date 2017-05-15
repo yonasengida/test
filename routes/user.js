@@ -1,210 +1,289 @@
-'use strict';
+// Load Module Dependencies
+var express   =   require('express');
+
+var user  = require('../controllers/user');
+var auth  = require('../controllers/auth');
+//var authorize = require('../lib/authorize');
+
+// Create a Router
+var router = express.Router();
 /**
- * Load Module Dependencies.
- */
-const Router  = require('koa-router');
-const debug   = require('debug')('api:user-router');
-
-const userController = require('../controllers/user');
-const authController = require('../controllers/auth');
-const accessControl  = require('../controllers/auth').accessControl;
-
-var router  = Router();
-
-/**
- * @api {post} /users/signup Create a user
- * @apiVersion 1.0.0
- * @apiName Signup
- * @apiGroup User
- *
- * @apiDescription Create a new user
- *
- * @apiParam {String} password Password/Pin
- *
- * @apiParamExample Request Example:
- *  {
- *    "password": "pin"
- *  }
- *
- * @apiSuccess {String} _id user id
- *
- * @apiSuccessExample Response Example:
- *  {
- *    "_id" : "556e1174a8952c9521286a60"
- *  }
- *
- */
-router.post('/signup', userController.create);
-
-/**
- * @api {post} /users/login Login a user
- * @apiVersion 1.0.0
+ * @apiDescription This endpoint is allow to login
+ * @api {post} /users/login  Login
  * @apiName Login
  * @apiGroup User
- *
- * @apiDescription Log in a user. The request returns a token used to authentication
- * of the user on subsequent requests. The token is placed as an HTTP header ie
- * ```Authorization: Bearer <Token-here>``` otherwise requests are rejected.
- *
- * @apiParam {String} password Password/Pin
- *
- * @apiParamExample Request Example:
- *  {
- *    "password": "mypin"
- *  }
- *
- * @apiSuccess {String} token auth token
- * @apiSuccess {Object} user user info
- * @apiSuccess {String} user._id user id
- *
- * @apiSuccessExample Response Example:
- *  {
- *    "token" : "ylHUMaVrS0dpcO/+nT+6aAVVGcRJzu=",
- *    "user": {
- *      "_id" : "556e1174a8952c9521286a60"
- *    }
- *  }
- *
- */
-router.post('/login', authController.login);
+ * 
+ * @apiParam {String} user_name Users Username
+ * @apiParam {String} password Users Password
+
+ * @apiParamExample Request Exmaple
+ * {
+ *    "user_name":"eagles-user",
+ *    "password":"dhjsdhjhdjhfajf"
+ * }
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       {
+ *       "token": "lxrF2tbwa7bCjnrMjE9P",
+ *       "user": {
+  *             "profile": {
+  *               "_id": "58afaeb061fffb6d17477be3",
+  *                    "user": "58afaea861fffb6d17477be2",
+  *                    "first_name": "SIMRET MOB1",
+  *                    "last_name": "yohannes",
+  *                    "last_modified": "2017-02-28T20:53:23.111Z"
+  *                 },
+  *                 "user_name": "simret",
+  *                 "last_login": "2017-03-01T03:17:35.500Z",
+  *                 "realm": "user",
+  *                 "role": "customer",
+  *                  "status": "active",
+  *                 "date_created": "2017-02-24T03:55:28.307Z",
+  *                  "last_modified": "2017-03-01T03:17:35.500Z"
+  *             }
+  *            }
+  *        }
+  */
+router.post('/login', auth.login);
 
 /**
- * @api {post} /users/logout Logout a user
- * @apiVersion 1.0.0
- * @apiName Logout
+ * @apiDescription This endpoint is allow to Signup
+ * @api {post} /users/signup  Signup User
+ * @apiName CreateUser
  * @apiGroup User
  *
- * @apiDescription Invalidate a users token
  *
- * @apiSuccess {Boolean} logged_out message
- *
- * @apiSuccessExample Response Example:
- *  {
- *    "logged_out" : true
- *  }
- *
+ * @apiParam {String} user_name Users Username
+ * @apiParam {String} password Users Password
+ * @apiParam {string} [realem] Users Group
+ * @apiParam {string} first_name Users First Name
+ * @apiParam {string} last_name Users last_name 
+ * @apiParam {string} [email] Users email
+ * @apiParam {Date}   [date_of_birth] Users Date of Birth
+ * @apiParam {string} [city] Users City
+ * @apiParam {string} [country] Users Country
+ * @apiParam {string} [mobile] Users Mobile
+ * @apiParam {string} [gender] Users Gender
+ * @apiParam {string} user_type User Type , Like Staff, customer
+ * 
+ * @apiParamExample Request Exmaple
+ * {
+ *   "password":"pass@123",
+ *   "user_name":"yonas",
+ *   "first_name":"yonas",
+ *   "last_name":"engida",
+ *   "user_type":"staff"
+ * }
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *        {
+    "_id": "589fb45b48baee02dc7c713b",
+   "user_name": "Tsegaw",
+    "realm": "user",
+    "profile": {
+      "_id": "589fb45b48baee02dc7c713c",
+      "user": "589fb45b48baee02dc7c713b",
+      "first_name": "Tsegaw",
+      "last_name": "Tsegaw",
+      "email": "test@gmail.com",
+    },
+    "last_modified": "2017-02-12T01:03:23.983Z",
+    "status": "active",
+    "role": "staff"
+  }
+ *     }
  */
-router.post('/logout', authController.logout);
+
+router.post('/signup', user.createUser);
 
 
 /**
- * @api {get} /users/:id Get User
- * @apiVersion 1.0.0
- * @apiName Get
+ * @apiDescription This Endpoint is allow to  Change Password
+ * @api {post} /users/passchange  Password Change
+ * @apiName ChangePassword
+ * @apiGroup User
+ * @apiParam {String} old_password Old Password
+ * @apiParam {String} password New Pasword
+  * @apiParamExample Request Exmaple
+ *   {
+ *    "old_password":"pass@1234",
+ *    "new_password":"yonas"
+ *   }
+ */
+router.post('/passchange', user.passwordChange);
+
+// POST /users/logout
+router.post('/logout', user.noop);
+/**
+ * @apiDescription This Endpoint is allow to Get All Users Information.
+ * @api {get} /users Request Users information
+ * @apiName Get All Users
  * @apiGroup User
  *
- * @apiDescription Get a user with the given id
- *
- * @apiSuccess {String} _id user id
- *
- * @apiSuccessExample Response Example:
- *  {
- *    "_id" : "556e1174a8952c9521286a60"
- *  }
+ *  @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *        {
+    "_id": "589fb45b48baee02dc7c713b",
+    "user_name": "Tsegaw",
+    "realm": "user",
+      "profile": {
+      "_id": "589fb45b48baee02dc7c713c",
+      "user": "589fb45b48baee02dc7c713b",
+      "first_name": "Tsegaw",
+      "last_name": "Tsegaw",
+      "email": "test@gmail.com",
+       },
+    "last_modified": "2017-02-12T01:03:23.983Z",
+    "status": "active",
+    "role": "staff"
+  }
+ *     }
  */
-router.get('/:id', accessControl(['consumer', 'admin']), userController.fetchOne);
-
+router.get('/' ,user.noop);
 /**
- * @api {put} /users/:id Update User
- * @apiVersion 1.0.0
- * @apiName Update
+ * @apiDescription Get Users Collection by Pagination. Use below parameters to query with pagination :- page=<RESULTS_PAGE> and 
+ * per_page=<RESULTS_PER_PAGE>.
+ * @api {get} /users/paginate?page=<RESULTS_PAGE>&per_page=<RESULTS_PER_PAGE> Users Collection by Pagination
+ * @apiName Get Users Collection
+ * @apiGroup User
+ * @apiSuccess {String} user_name Users Username
+ * @apiSuccess {String} password Users Password
+ * @apiSuccess {string} [realem] Users Group
+ * @apiSuccess {string} first_name Users First Name
+ * @apiSuccess {string} last_name Users last_name 
+ * @apiSuccess {string} [email] Users email
+ * @apiSuccess {Date}   [date_of_birth] Users Date of Birth
+ * @apiSuccess {string} [city] Users City
+ * @apiSuccess {string} [country] Users Country
+ * @apiSuccess {string} [mobile] Users Mobile
+ * @apiSuccess {string} [gender] Users Gender
+ * @apiSuccess {string} user_type User Type , Like Staff, customer
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *        {
+    "_id": "589fb45b48baee02dc7c713b",
+       "user_name": "Tsegaw",
+    "realm": "user",
+     "profile": {
+      "_id": "589fb45b48baee02dc7c713c",
+      "user": "589fb45b48baee02dc7c713b",
+      "first_name": "Tsegaw",
+      "last_name": "Tsegaw",
+      "email": "test@gmail.com",
+    
+    },
+    "last_modified": "2017-02-12T01:03:23.983Z",
+    "status": "active",
+    "role": "staff"
+  }
+ *     }
+ */
+
+ 
+router.get('/paginate',user.getByPagination)
+
+/**@apiDescription Get Specific User Collection. To get Sepecific user information pass id  as parameter.
+ * @api {get} /users/:id Request Specific User information
+ * @apiName GetUser
  * @apiGroup User
  *
- * @apiDescription Update a user with the given id
- *
- * @apiSuccess {String} _id user id
- *
- * @apiSuccessExample Response Example:
- *  {
- *    "_id" : "556e1174a8952c9521286a60"
- *  }
+ * @apiParam {string} _id Users unique ID.
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *{
+ *        {
+    "_id": "589fb45b48baee02dc7c713b",
+    "password": "passs@123@123",
+    "user_name": "Tsegaw",
+    "realm": "user",
+     "profile": {
+      "_id": "589fb45b48baee02dc7c713c",
+      "user": "589fb45b48baee02dc7c713b",
+      "first_name": "Tsegaw",
+      "last_name": "Tsegaw",
+      "email": "test@gmail.com",
+   },
+    "last_modified": "2017-02-12T01:03:23.983Z",
+    "status": "active",
+    "role": "staff"
+  }
+ *     }
  */
-router.put('/:id', accessControl(['consumer', 'admin']), userController.update);
+
+router.param('id',user.validateUser);
+
+router.get('/:id', user.getUser);
 
 /**
- * @api {get} /users/paginate?page=<RESULTS_PAGE>&per_page=<RESULTS_PER_PAGE> Get users collection
- * @apiVersion 1.0.0
- * @apiName FetchPaginated
+ * @api {put} /users/:id Update Specific User information
+ * @apiName UpdateUSer
  * @apiGroup User
  *
- * @apiDescription Get a collection of users. The endpoint has pagination
- * out of the box. Use these params to query with pagination: `page=<RESULTS_PAGE`
- * and `per_page=<RESULTS_PER_PAGE>`.
- *
- * @apiSuccess {String} _id user id
- *
- * @apiSuccessExample Response Example:
- *  {
- *    "total_pages": 1,
- *    "total_docs_count": 0,
- *    "docs": [{
- *      "_id" : "556e1174a8952c9521286a60",
- *    }]
- *  }
+ * @apiParam {Object} Data Update Data
+ * @apiParamExample Request Exmaple
+ *   {
+ *    "user_name":"afrikik-user",
+ *    "password":"dhjsdhjhdjhfajf"
+ *   }
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *        {
+    "_id": "589fb45b48baee02dc7c713b",
+    "password": "passs@123@123",
+    "user_name": "Tsegaw",
+    "realm": "user",
+     "profile": {
+      "_id": "589fb45b48baee02dc7c713c",
+      "user": "589fb45b48baee02dc7c713b",
+      "first_name": "Tsegaw",
+      "last_name": "Tsegaw",
+      "email": "test@gmail.com",
+    
+    },
+    "last_modified": "2017-02-12T01:03:23.983Z",
+    "status": "active",
+    "role": "staff"
+  }
+ *     }
  */
-router.get('/paginate', accessControl(['admin']), userController.fetchAllByPagination);
+router.put('/:id', user.updateUser);
 
 /**
- * @api {get} /users/all Get users collection
- * @apiVersion 1.0.0
- * @apiName FetchAll
- * @apiGroup User
- *
- * @apiDescription Get a collection of users.
- *
- * @apiSuccess {String} _id user id
- *
- * @apiSuccessExample Response Example:
- *  [{
- *      "_id" : "556e1174a8952c9521286a60",
- *  }]
- */
-router.get('/all', accessControl(['admin']), userController.fetchAll);
-
-/**
- * @api {delete} /users/:id Delete User
- * @apiVersion 1.0.0
+ * @api {delete} /users/:id Delete Specific User information
  * @apiName Delete
  * @apiGroup User
  *
- * @apiDescription Delete a user with the given id
- *
- * @apiSuccess {String} _id user id
- *
- * @apiSuccessExample Response Example:
+ * @apiParam {string} _id Users unique ID.
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
  *  {
- *    "_id" : "556e1174a8952c9521286a60"
- *  }
- *
+ *        {
+      "_id": "589fb45b48baee02dc7c713b",
+      "user_name": "Tsegaw",
+      "realm": "user",
+      "profile": {
+      "_id": "589fb45b48baee02dc7c713c",
+      "user": "589fb45b48baee02dc7c713b",
+      "first_name": "Tsegaw",
+      "last_name": "Tsegaw",
+      "email": "test@gmail.com",
+         },
+    "last_modified": "2017-02-12T01:03:23.983Z",
+    "status": "active",
+    "role": "staff"
+     }
+ *}
  */
-router.delete('/:id', accessControl(['consumer', 'admin']), userController.delete);
+router.delete('/:id', user.noop);
 
-
-/**
- * @api {put} /users/password/update Update user password/pin
- * @apiVersion 1.0.0
- * @apiName UpdatePassword
- * @apiGroup User
- *
- * @apiDescription Update password of a given user.
- *
- * @apiParam {String} security_question_answer security question answer
- * @apiParam {String} phone_number phone number
- * @apiParam {String} new_password new password/pin
- *
- * @apiParamExample Request Example:
- * {
- *    "security_answer" : "john doey",
- *    "phone_number" : "0713510521"
- *    "new_password": "2654"
- * }
- *
- * @apiSuccessExample Response Example:
- *  {
- *    "updated": true
- *  }
- */
-router.post('/password/update', userController.updatePassword);
-
-// Expose User Router
+// Export Router
 module.exports = router;
+

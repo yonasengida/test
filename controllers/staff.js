@@ -32,7 +32,7 @@ exports.validateStaff = function validateStaff(req, res, next, id) {
       message: "Not Found",
       status: 404
     });
-9
+
 
   } else {
     StaffDal.get({ _id: id }, function (err, staff) {

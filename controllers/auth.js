@@ -2,13 +2,9 @@
 var events     = require('events');
 var crypto     = require('crypto');
 
-
 var debug      = require('debug')('afrikik-api');
-
 var moment     = require('moment');
-
 var config     = require('../config');
-
 var UserDal    = require('../dal/user');
 var TokenDal   = require('../dal/token');
 
@@ -33,7 +29,7 @@ exports.login = function login(req, res, next) {
 
     workflow.on('validateUsername', function validateUsername() {
         UserDal.get({user_name: req.body.user_name }, function done(err, user) {
-            console.log(user);
+          //  console.log(user);
             if (!user._id) {
 
                 res.status(404);

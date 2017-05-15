@@ -25,6 +25,6 @@ name:{ type:String}
 
 
 // add middleware to support pagination
-UserSchema.plugin(paginator);
+JobCategorySchema.plugin(paginator);
 // Expose the User Model
 module.exports = mongoose.model('JobCategory', JobCategorySchema);

@@ -1,9 +1,7 @@
 'use strict';
-
 /**
  * Vacancy Model Definition.
  */
-
 /**
  * Load Module Dependencies.
  */
@@ -15,14 +13,13 @@ const bcrypt    = require('bcrypt');
 const config    = require('../config');
 
 var Schema = mongoose.Schema;
-
 // New Vacancy Schema Instance
 var VacancySchema = new Schema({
-    code:         { type: String },
-    position:     { type: String },
-    description:  { type: String },
-    job_category: [{ type:Schema.Types.ObjectId, ref:'JobCategory'}],
-    exprience:    { type:String},
+    code:           { type: String },
+    position:       { type: String },
+    description:    { type: String },
+    job_category:   [{type:Schema.Types.ObjectId, ref:'JobCategory'}],
+    exprience:      { type:String},
     qualifications: { type:String},
     status:         { type:String},
     due_date:       { type:String},
@@ -31,12 +28,16 @@ var VacancySchema = new Schema({
     contact:        { type:String},
     mobile:         { type:String},
     email:          { type:String},
-    level:          { type:String}
+    level:          { type:String},
+    created_by:     { type:Schema.Types.ObjectId, ref:'User'},
+    Updated_by:     { type:Schema.Types.ObjectId, ref:'User'},
+    created_at:     { type:Date},
+    updated_at:     { type: Date}
 },{versionKey: false},{
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at'}
 });
 
 // add middleware to support pagination
-UserSchema.plugin(paginator);
+VacancySchema.plugin(paginator);
 // Expose the User Model
 module.exports = mongoose.model('Vacancy', VacancySchema);

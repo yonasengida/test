@@ -3,12 +3,26 @@ var event = require('events');
 
 var CustomerDal    = require('../dal/customer');
 var ProfileDal     = require('../dal/profile');
+
+/**
+ * NOOP
+ * @param {req} HTTP Request
+ * @param {res} HTTP Response
+ * @param {next} Middleware Dispatcher
+ * 
+ */
 exports.noop = function (req, res, next) {
     res.json({
         msg: "To Be Implemeted"
     });
 };
-
+/**
+ * Validate Customer
+ * @param {req} HTTP Request
+ * @param {res} HTTP Response
+ * @param {next} Middleware Dispatcher
+ * 
+ */
 exports.validate = function validate(req, res, next) {
   //Validate the id is mongoid or not
   req.checkParams('id', 'Invalid urlparam').isMongoId(id);
@@ -27,7 +41,7 @@ exports.validate = function validate(req, res, next) {
 
   } else {
     CustomerDal.get({ _id: id }, function (err, doc) {
-      if (club._id) {
+      if (doc._id) {
         req.doc = doc._id;
         next();
       } else {
@@ -41,7 +55,13 @@ exports.validate = function validate(req, res, next) {
   }
     
 };
-
+/**
+ * Create Customer
+ * @param {req} HTTP Request
+ * @param {res} HTTP Response
+ * @param {next} Middleware Dispatcher
+ * 
+ */
 exports.createCustomer = function createCustomer(req, res, next) {
   var body = req.body;
   var workflow = new event.EventEmitter();
@@ -83,11 +103,23 @@ exports.createCustomer = function createCustomer(req, res, next) {
     });
     workflow.emit('validateInput');
 };
-
+/**
+ * Get Customer
+ * @param {req} HTTP Request
+ * @param {res} HTTP Response
+ * @param {next} Middleware Dispatcher
+ * 
+ */
 exports.getCustomer = function getCustomer(req, res, next) {
   res.json(req.doc);
 };
-
+/**
+ * Get Customers
+ * @param {req} HTTP Request
+ * @param {res} HTTP Response
+ * @param {next} Middleware Dispatcher
+ * 
+ */
 exports.getCustomers = function getCustomers(req, res, next) {
   CustomerDal.getCollection({}, function getAllCustomers(err, docs) {
     if (err) {
@@ -96,7 +128,13 @@ exports.getCustomers = function getCustomers(req, res, next) {
     res.json(docs);
   });
 };
-
+/**
+ * Update Customer
+ * @param {req} HTTP Requst
+ * @param {res} HTTP Response
+ * @param {next} Middleware Dispatcher
+ * 
+ */
 exports.updateCustomer = function updateCustomer(req, res, next) {
   CustomerDal.update({ _id: req.doc_id }, body, function updateCustomerCb(err, doc) {
     if (err) {
@@ -105,7 +143,13 @@ exports.updateCustomer = function updateCustomer(req, res, next) {
     res.json(err);
   });
 };
-
+/**
+ * Get Customers by pagination
+ * @param {req} HTTP Request
+ * @param {res} HTTP Response
+ * @param {next} MIddle Dispatcher
+ * 
+ */
 exports.getCustomersByPagination = function getCustomersByPagination(req, res, next){
 
  var query ={};

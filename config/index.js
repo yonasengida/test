@@ -5,7 +5,7 @@
 //   defaultHidden: { _id: false, password: true, '_v': true }
 // }));
 
-var HTTP_PORT  = process.env.HTTP_PORT || 8100;
+var HTTP_PORT  = process.env.HTTP_PORT || 9090;
 
 module.exports = {
   // HTTP PORT

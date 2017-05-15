@@ -1,7 +1,7 @@
 // Load Module Dependencies
 var express     = require('express');
 var bodyParser  = require('body-parser');
-var debug       = require('debug')('afrikik-api');
+var debug       = require('debug')('eagles-api');
 var mongoose    = require('mongoose');
 var validator   = require('express-validator');
 var search      = require('express-partial-response');
@@ -14,7 +14,7 @@ var authenticate = require('./lib/authenticate');
 mongoose.connect(config.MONGODB_URL);
 // listen to connection event
 mongoose.connection.on('connected', function mongodbConnectionListener() {
-  debug('AFRIKIK-Mongodb Connected successfully');
+  debug('EAGLES-Mongodb Connected successfully');
 });
 // handle error eventy
 mongoose.connection.on('error', function mongodbErrorListener() {
@@ -27,8 +27,8 @@ mongoose.connection.on('error', function mongodbErrorListener() {
 // Initialize app
 var app = express();
 
-//Authentication Middleware
-app.use(authenticate({set_auth:false}).unless({
+// //Authentication Middleware
+app.use(authenticate({set_auth:true}).unless({
   path: ['/users/login', '/users/signup']
 }));
 
@@ -77,7 +77,7 @@ app.use(function errorHandler(err, req, res, next) {
 
 // Listen to HTTP Port
 app.listen(config.HTTP_PORT, function connectionListener() {
-  debug('AFRIKIK-API Server running on port %s', config.HTTP_PORT);
+  debug('EAGLES API running on port %s', config.HTTP_PORT);
 });
 
 module.exports = app;
