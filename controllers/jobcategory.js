@@ -130,7 +130,7 @@ exports.getJobCategory = function getJobCategory(req, res, next) {
 exports.getJobCategorys = function getJobCategorys(req, res, next) {
   debug("Fetching Job Category")
   console.log("Fetching Job Category")
-  console.log(req._user._id);
+ // console.log(req._user._id);
   JobCategoryDal.getCollection({}, function getAllJobCategorys(err, docs) {
     if (err) {
       return next(err);

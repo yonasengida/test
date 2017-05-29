@@ -28,7 +28,7 @@ mongoose.connection.on('error', function mongodbErrorListener() {
 var app = express();
 
 // //Authentication Middleware
-app.use(authenticate({set_auth:true}).unless({
+app.use(authenticate({set_auth:false}).unless({
   path: ['/users/login', '/users/signup']
 }));
 
