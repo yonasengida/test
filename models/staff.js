@@ -18,7 +18,6 @@ var Schema = mongoose.Schema;
 
 // New Customer Schema Instance
 var StaffSchema = new Schema({
-
     
 },{versionKey: false},
 {
