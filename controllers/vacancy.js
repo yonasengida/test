@@ -23,7 +23,8 @@ exports.noop = function (req, res, next) {
  * @param {next} Middleware Dispatcher
  * 
  */
-exports.validate = function validate(req, res, next) {
+exports.validate = function validate(req, res, next,id) {
+  debug("Validate Vacancy");
   //Validate the id is mongoid or not
   req.checkParams('id', 'Invalid urlparam').isMongoId(id);
 
@@ -42,7 +43,7 @@ exports.validate = function validate(req, res, next) {
   } else {
     VacancyDal.get({ _id: id }, function (err, doc) {
       if (doc._id) {
-        req.doc = doc._id;
+        req.doc = doc;
         next();
       } else {
         res.status(404)
@@ -175,11 +176,13 @@ exports.getVacancies = function getVacancies(req, res, next) {
  * 
  */
 exports.updateVacancy = function updateVacancy(req, res, next) {
-  VacancyDal.update({ _id: req.doc_id }, body, function updateVacancyCb(err, doc) {
+  debug("Update Vacancy")
+  var body = req.body;
+  VacancyDal.update({ _id: req.doc._id }, body, function updateVacancyCb(err, doc) {
     if (err) {
       return next(err);
     }
-    res.json(err);
+    res.json(doc);
   });
 };
 /**
