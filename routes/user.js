@@ -73,7 +73,8 @@ router.post('/login', auth.login);
  *   "user_name":"yonas",
  *   "first_name":"yonas",
  *   "last_name":"engida",
- *   "user_type":"staff"
+ *   "user_type":"staff",
+ *   "mobile":"0930015100"
  * }
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK

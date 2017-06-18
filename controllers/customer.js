@@ -1,6 +1,6 @@
 // Load Module Dependencies
 var event = require('events');
-
+var debug = require('debug')('eagles-api:Controllers');;
 var CustomerDal    = require('../dal/customer');
 var ProfileDal     = require('../dal/profile');
 
@@ -167,4 +167,60 @@ exports.getCustomersByPagination = function getCustomersByPagination(req, res, n
     }
     res.json(doc);
   });
+};
+
+
+exports.addJobCategory = function addJobCategory(req, res, next){
+  debug('Add Jobcategory');
+  var body     = req.body;
+  var workflow = new event.EventEmitter();
+
+workflow.on('inputValidation', function inputValidation(){
+req.checkBody('job_category','invalid job category').notEmpty().isMongoId('job_category').withMessage('Wrong ID is passed');;
+req.checkBody('customerId','invalid Cutomer Id').notEmpty().isMongoId('customerId').withMessage('Wrong ID is passed');;
+if(req.validationErrors()){
+  res.status(400);
+  res.json({
+    error:true,
+    msg:req.validationErrors(),
+    status:400
+  });
+  return;
+}
+workflow.emit('checkDuplication');
+});
+
+   workflow.on('checkDuplication', function checkDuplication() {
+     debug('Check Duplication')
+        CustomerDal.get({ _id:body.customerId,job_category: { $in: [body.job_category] } }, function getCustomerJobCategory(err, doc) {
+            if(err){
+                return next(err);
+            }
+            if(doc._id){
+                res.status(409);
+                res.json({
+                    error:true,
+                    msg:"Already Exists",
+                    status:409
+
+                });
+                return ;
+            }else{
+                workflow.emit('addCategory');
+            }
+        });
+    });
+      workflow.on('addCategory', function addCategory(){
+        debug('Add Job Category')
+        console.log(body.customerId+body.job_category);
+        CustomerDal.update({_id:body.customerId},{$push:{job_category:body.job_category}}, function addJobCategory(err, doc){
+            if(err){
+                return nect(err);
+            }
+            res.status(201);
+            res.json(doc);
+        });
+    });
+
+    workflow.emit('inputValidation');
 };

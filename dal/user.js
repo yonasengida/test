@@ -8,7 +8,7 @@
 /**
  * Load Module Dependencies.
  */
-var debug   = require('debug')('api:dal-user');
+var debug   = require('debug')('eagles-api:dal-user');
 var moment  = require('moment');
 
 var User        = require('../models/user');

@@ -1,6 +1,6 @@
 // Load Module Dependencies
 var events       = require('events');
-var debug        = require('debug')('afrikik-api');
+var debug        = require('debug')('eagles-api');
 var moment       = require('moment');
 var bcrypt    = require('bcrypt');
 var config    = require('../config');
@@ -71,7 +71,7 @@ exports.validateUser = function validateUser(req, res, next, id) {
  * 
  */
 exports.createUser = function createUser(req, res, next) {
-  console.log('hello');
+  //console.log('hello');
   debug('create user');
 
   var workflow = new events.EventEmitter();
@@ -113,7 +113,7 @@ exports.createUser = function createUser(req, res, next) {
    * Check for user exist or not
    */
   workflow.on('checkUserExist', function checkUserExist() {
-    
+    debug("checkUserExist")
     var user_name = body.user_name;
     // Query DB for a user with the given ID
     UserDal.get({ user_name: user_name }, function cb(err, user) {
@@ -171,7 +171,7 @@ exports.createUser = function createUser(req, res, next) {
           if (err) {
             return next(err);
           }
-          // console.log('profile ID'+profile+'user ID'+user);
+           console.log('profile ID'+profile+'user ID'+user);
           workflow.emit('createUserType', user, profile);
 
         });

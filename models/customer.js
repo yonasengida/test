@@ -19,6 +19,7 @@ var Schema = mongoose.Schema;
 // New Customer Schema Instance
 var CustomerSchema = new Schema({
 job_category:[{type:Schema.Types.ObjectId, ref:'JobCategory'}],
+profile:         { type: Schema.Types.ObjectId, ref: 'Profile' },
 expire_date:{ type:Date}
 },{versionKey: false},{
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at'}

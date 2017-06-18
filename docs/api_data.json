@@ -1,5 +1,52 @@
 [
   {
+    "description": "<p>This endpoint is allow to Add Job Category</p>",
+    "type": "post",
+    "url": "/customers/category",
+    "title": "Add Jobcategory",
+    "name": "AddJobCategory",
+    "group": "Customer",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "customerId",
+            "description": "<p>Customer Id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "job_category",
+            "description": "<p>Job Category</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Exmaple",
+          "content": "{\n\n\t\"job_category\":\"5919d43e0971ba43eeeaced3\",\n\t\"customerId\":\"5919d82e0971ba43eeeaced9\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n{\n      \"_id\": \"5919d82e0971ba43eeeaced9\",\n      \"job_category\": [\n          \"5919d43e0971ba43eeeaced3\"\n      ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/customer.js",
+    "groupTitle": "Customer"
+  },
+  {
     "description": "<p>This Endpoint is allow to get specific customer</p>",
     "type": "get",
     "url": "/customers/:id",
@@ -544,7 +591,7 @@
       "examples": [
         {
           "title": "Request Exmaple",
-          "content": "{\n  \"password\":\"pass@123\",\n  \"user_name\":\"yonas\",\n  \"first_name\":\"yonas\",\n  \"last_name\":\"engida\",\n  \"user_type\":\"staff\"\n}",
+          "content": "{\n  \"password\":\"pass@123\",\n  \"user_name\":\"yonas\",\n  \"first_name\":\"yonas\",\n  \"last_name\":\"engida\",\n  \"user_type\":\"staff\",\n  \"mobile\":\"0930015100\"\n}",
           "type": "json"
         }
       ]

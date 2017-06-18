@@ -2,7 +2,7 @@
 var events     = require('events');
 var crypto     = require('crypto');
 
-var debug      = require('debug')('afrikik-api');
+var debug      = require('debug')('eagles-api');
 var moment     = require('moment');
 var config     = require('../config');
 var UserDal    = require('../dal/user');

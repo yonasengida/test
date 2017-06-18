@@ -6,15 +6,41 @@ var customer = require('../controllers/customer');
 // Create a Router
 var router = express.Router();
 /**
+ * @apiDescription This endpoint is allow to Add Job Category
+ * @api {post} /customers/category  Add Jobcategory
+ * @apiName AddJobCategory
+ * @apiGroup Customer
+ *
+ *
+ * @apiParam {String} customerId Customer Id
+ * @apiParam {String} job_category Job Category
+ *
+ @apiParamExample Request Exmaple
+ * {
+ * 
+ * 	"job_category":"5919d43e0971ba43eeeaced3",
+ *	"customerId":"5919d82e0971ba43eeeaced9",
+ * } 
+ *    
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ * {
+ *       "_id": "5919d82e0971ba43eeeaced9",
+ *       "job_category": [
+ *           "5919d43e0971ba43eeeaced3"
+ *       ]
+ * }
+ */
+router.post('/category', customer.addJobCategory);
+/**
  * @apiDescription This endpoint is allow to Get all customers
  * @api {get} /customers  Get all Customer
  * @apiName GetCustomers
  * @apiGroup Customer
  *
- *
  * @apiParam {String} id Customer id
  *
- * * @apiSuccessExample {json} Success-Response:
+ * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  * {
  * 
