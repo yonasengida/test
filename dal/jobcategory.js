@@ -8,7 +8,7 @@
 /**
  * Load Module Dependencies.
  */
-var debug   = require('debug')('api:dal-JobCategory');
+var debug   = require('debug')('eagle-api:dal-JobCategory');
 var moment  = require('moment');
 
 var JobCategory        = require('../models/jobcategory');

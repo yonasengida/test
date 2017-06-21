@@ -5,15 +5,15 @@
 //   defaultHidden: { _id: false, password: true, '_v': true }
 // }));
 
-var HTTP_PORT  = process.env.HTTP_PORT || 9090;
+var HTTP_PORT  = process.env.PORT || 5000;
 
 module.exports = {
   // HTTP PORT
   HTTP_PORT: HTTP_PORT,
 
   // MONGODB URL
-  MONGODB_URL: 'mongodb://localhost/eagles',
-    
+ // MONGODB_URL: 'mongodb://localhost/eagles',
+   MONGODB_URL: 'mongodb://eagle:eagle@ds133162.mlab.com:33162/eagle', 
   // SALT VALUE LENGTH
   SALT_LENGTH :7,
   

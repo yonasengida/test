@@ -8,7 +8,7 @@
 /**
  * Load Module Dependencies.
  */
-var debug   = require('debug')('api:dal-token');
+var debug   = require('debug')('eagle-api:dal-token');
 var moment  = require('moment');
 
 var Token        = require('../models/token');

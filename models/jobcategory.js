@@ -23,7 +23,6 @@ name:{ type:String}
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at'}
 });
 
-
 // add middleware to support pagination
 JobCategorySchema.plugin(paginator);
 // Expose the User Model

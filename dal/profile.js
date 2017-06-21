@@ -8,7 +8,7 @@
 /**
  * Load Module Dependencies.
  */
-var debug   = require('debug')('api:dal-profile');
+var debug   = require('debug')('eagle-api:dal-profile');
 var moment  = require('moment');
 
 var Profile        = require('../models/profile');

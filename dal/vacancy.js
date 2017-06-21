@@ -8,7 +8,7 @@
 /**
  * Load Module Dependencies.
  */
-var debug   = require('debug')('api:dal-Vacancy');
+var debug   = require('debug')('eagle-api:dal-Vacancy');
 var moment  = require('moment');
 
 var Vacancy        = require('../models/vacancy');
@@ -79,7 +79,7 @@ exports.delete = function deleteItem(query, cb) {
           return cb(err);
         }
 
-        cb(null, Vacancy);
+        cb(null, vacancy);
 
       });
 

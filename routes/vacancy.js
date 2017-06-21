@@ -153,6 +153,7 @@ router.get('/', vacancy.getVacancies);
     }
  */
 router.get('/paginate',vacancy.getVacancysByPagination)
+router.get('/search',vacancy.search)
 
 router.param('id', vacancy.validate)
 /**

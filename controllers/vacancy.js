@@ -209,4 +209,21 @@ exports.getVacancysByPagination = function getVacancysByPagination(req, res, nex
     }
     res.json(doc);
   });
+}
+
+exports.search = function search(req, res, next){
+debug("Search");
+//var query={region: "NA",sector:"Some Sector"};
+var query={};
+
+ VacancyDal.getCollection(query, function(err, doc) 
+ {
+    if (err)
+    {
+        res.send(err);
+    }
+    console.log(doc);
+    res.json(doc);
+
+ });
 };

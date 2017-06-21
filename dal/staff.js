@@ -8,7 +8,7 @@
 /**
  * Load Module Dependencies.
  */
-var debug   = require('debug')('api:dal-staff');
+var debug   = require('debug')('eagle-api:dal-staff');
 var moment  = require('moment');
 
 var Staff        = require('../models/staff');
