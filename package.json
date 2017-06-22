@@ -31,7 +31,7 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha",
-    "start": "DEBUG=eag* nodemon app.js",
+    "start": "node app.js",
     "docs": "./node_modules/.bin/apidoc -i ./routes -o ./docs"
   },
   "repository": {
