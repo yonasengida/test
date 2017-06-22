@@ -5,7 +5,7 @@
  * Load Module Depencencies
  */
 var mongoose  = require('mongoose');
-var bcrypt    = require('bcrypt');
+var bcrypt    = require('bcryptjs');
 var config    = require('../config');
 var moment    = require('moment');
 
