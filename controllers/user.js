@@ -2,7 +2,7 @@
 var events       = require('events');
 var debug        = require('debug')('eagles-api');
 var moment       = require('moment');
-var bcrypt    = require('bcrypt');
+var bcrypt    = require('bcryptjs');
 var config    = require('../config');
 
 var CustomerDal    = require('../dal/customer');

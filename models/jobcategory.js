@@ -10,7 +10,7 @@
 const mongoose  = require('mongoose');
 const moment    = require('moment');
 const paginator = require('mongoose-paginate');
-const bcrypt    = require('bcrypt');
+const bcrypt    = require('bcryptjs');
 
 const config    = require('../config');
 
