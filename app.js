@@ -77,6 +77,7 @@ app.use(function errorHandler(err, req, res, next) {
 
 // Listen to HTTP Port
 app.listen(config.HTTP_PORT, function connectionListener() {
+  console.log("App is running");
   debug('EAGLES API running on port %s', config.HTTP_PORT);
 });
 
