@@ -143,7 +143,7 @@ router.post('/logout', user.noop);
   }
  *     }
  */
-router.get('/' ,user.noop);
+router.get('/' ,user.getUsers);
 /**
  * @apiDescription Get Users Collection by Pagination. Use below parameters to query with pagination :- page=<RESULTS_PAGE> and 
  * per_page=<RESULTS_PER_PAGE>.
