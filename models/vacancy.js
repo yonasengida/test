@@ -9,17 +9,24 @@ const mongoose  = require('mongoose');
 const moment    = require('moment');
 const paginator = require('mongoose-paginate');
 const bcrypt    = require('bcryptjs');
+mongoose.plugin(require('mongoose-regex-search'));
 
 const config    = require('../config');
 
 var Schema = mongoose.Schema;
 // New Vacancy Schema Instance
 var VacancySchema = new Schema({
-    code:           { type: String },
-    position:       { type: String },
+    code:           { type: String,
+                     index: true,
+                      searchable: true },
+    position:       { type: String,
+                       index: true,
+                      searchable: true },
     description:    { type: String },
-    job_category:   [{type:Schema.Types.ObjectId, ref:'JobCategory'}],
-    exprience:      { type:String},
+    job_category:   {type:Schema.Types.ObjectId, ref:'JobCategory'},
+    exprience:      { type:Number,
+                      index: true,
+                      searchable: true },
     qualifications: { type:String},
     status:         { type:String},
     due_date:       { type:String},

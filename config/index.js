@@ -13,7 +13,7 @@ module.exports = {
 
   // MONGODB URL
  //MONGODB_URL: 'mongodb://localhost/eagles',
-  MONGODB_URL: 'mongodb://eagle:eagle@ds133162.mlab.com:33162/eagle', 
+ MONGODB_URL: 'mongodb://eagle:eagle@ds133162.mlab.com:33162/eagle', 
   // SALT VALUE LENGTH
   SALT_LENGTH :7,
   

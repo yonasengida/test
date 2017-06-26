@@ -1,6 +1,7 @@
 // Load Module Dependencies
+'use strict';
 var event = require('events');
-var debug =require('debug')('eagles-api:vacancy-controller')
+var debug = require('debug')('eagles-api:vacancy-controller')
 var VacancyDal = require('../dal/vacancy');
 var JobcategoryDal = require('../dal/jobcategory');
 
@@ -12,9 +13,9 @@ var JobcategoryDal = require('../dal/jobcategory');
  * 
  */
 exports.noop = function (req, res, next) {
-    res.json({
-        msg: "To Be Implemeted"
-    });
+  res.json({
+    msg: "To Be Implemeted"
+  });
 };
 /**
  * Validate Vacancy
@@ -23,7 +24,7 @@ exports.noop = function (req, res, next) {
  * @param {next} Middleware Dispatcher
  * 
  */
-exports.validate = function validate(req, res, next,id) {
+exports.validate = function validate(req, res, next, id) {
   debug("Validate Vacancy");
   //Validate the id is mongoid or not
   req.checkParams('id', 'Invalid urlparam').isMongoId(id);
@@ -54,7 +55,7 @@ exports.validate = function validate(req, res, next,id) {
       }
     });
   }
-    
+
 };
 /**
  * Create Vacancy
@@ -64,30 +65,30 @@ exports.validate = function validate(req, res, next,id) {
  * 
  */
 exports.createVacancy = function createVacancy(req, res, next) {
-   
+
   var body = req.body;
   var workflow = new event.EventEmitter();
   workflow.on('validateInput', function validate() {
-      debug('Valdiate Vacncy Input')
-       req.checkBody('code', 'Invalid Vacancy Code').notEmpty().withMessage('Code should not be Empty')
-       req.checkBody('position', 'Invalid Position').notEmpty().withMessage('Position should not be Empty')
-       req.checkBody('description', 'Invalid Description').notEmpty().withMessage('Description should not be Empty')
-       req.checkBody('job_category', 'Invalid Job Category').isMongoId('job_category').notEmpty().withMessage('Job Category should not be Empty')
-       req.checkBody('exprience', 'Invalid  Exprience').notEmpty().withMessage('Exprience should not be Empty')
-       req.checkBody('due_date', 'Invalid  Due Date').notEmpty().withMessage('Due Date should not be Empty')
-       req.checkBody('level', 'Invalid Level').notEmpty().withMessage('Level should not be Empty')
-       
-      if(req.validationErrors()){
-          res.status(400);
-          res.json({
-              error:true,
-              msg:req.validationErrors(),
-              status:400
-          });
-        return;
-      }
-      
-         workflow.emit('checkDuplication');
+    debug('Valdiate Vacncy Input')
+    req.checkBody('code', 'Invalid Vacancy Code').notEmpty().withMessage('Code should not be Empty')
+    req.checkBody('position', 'Invalid Position').notEmpty().withMessage('Position should not be Empty')
+    req.checkBody('description', 'Invalid Description').notEmpty().withMessage('Description should not be Empty')
+    req.checkBody('job_category', 'Invalid Job Category').isMongoId('job_category').notEmpty().withMessage('Job Category should not be Empty')
+    req.checkBody('exprience', 'Invalid  Exprience').notEmpty().withMessage('Exprience should not be Empty')
+    req.checkBody('due_date', 'Invalid  Due Date').notEmpty().withMessage('Due Date should not be Empty')
+    req.checkBody('level', 'Invalid Level').notEmpty().withMessage('Level should not be Empty')
+
+    if (req.validationErrors()) {
+      res.status(400);
+      res.json({
+        error: true,
+        msg: req.validationErrors(),
+        status: 400
+      });
+      return;
+    }
+
+    workflow.emit('checkDuplication');
   });
 
   workflow.on('checkDuplication', function checkDuplication() {
@@ -103,45 +104,45 @@ exports.createVacancy = function createVacancy(req, res, next) {
           msg: "Vacancy is already exist",
           status: 409
         });
-       return ;
+        return;
       } else {
         workflow.emit('checkJobCategoryExistence');
       }
     });
 
   });
-    workflow.on('checkJobCategoryExistence', function checkJC(){
-    JobcategoryDal.get({_id:body.job_category},function getJobCategory(err, doc){
-      if(err){
+  workflow.on('checkJobCategoryExistence', function checkJC() {
+    JobcategoryDal.get({ _id: body.job_category }, function getJobCategory(err, doc) {
+      if (err) {
         return next(err);
       }
-      if(!doc.id){
+      if (!doc.id) {
         res.json({
-          error:true,
-          msg:"Job Category IS not Found",
-          status:404
+          error: true,
+          msg: "Job Category IS not Found",
+          status: 404
         });
         return;
-      }else{
-       workflow.emit('createVacancy');  
+      } else {
+        workflow.emit('createVacancy');
       }
-   
+
     });
-   
-    });
-    workflow.on('createVacancy', function createVacancy() {
-      debug('Create Vacancy');
-      VacancyDal.create(body, function createVacancy(err, doc) {
-        if (err) {
-          return next(err);
-        } 
-         res.status(201);
-        res.json(doc);
+
+  });
+  workflow.on('createVacancy', function createVacancy() {
+    debug('Create Vacancy');
+    VacancyDal.create(body, function createVacancy(err, doc) {
+      if (err) {
+        return next(err);
+      }
+      res.status(201);
+      res.json(doc);
 
 
-      });
     });
-   workflow.emit('validateInput');
+  });
+  workflow.emit('validateInput');
 };
 /**
  * Get Vacancy
@@ -192,18 +193,18 @@ exports.updateVacancy = function updateVacancy(req, res, next) {
  * @param {next} MIddle Dispatcher
  * 
  */
-exports.getVacancysByPagination = function getVacancysByPagination(req, res, next){
+exports.getVacancysByPagination = function getVacancysByPagination(req, res, next) {
 
- var query ={};
- // retrieve pagination query params
- var page   = req.query.page;
- var limit  = req.query.per_page;
- var queryOpts ={
-   page:page,
-   limit:limit
+  var query = {};
+  // retrieve pagination query params
+  var page = req.query.page;
+  var limit = req.query.per_page;
+  var queryOpts = {
+    page: page,
+    limit: limit
   };
 
-  VacancyDal.getCollectionBYPagination(query,queryOpts, function getByPaginationCb(err, doc) {
+  VacancyDal.getCollectionBYPagination(query, queryOpts, function getByPaginationCb(err, doc) {
     if (err) {
       return next(err);
     }
@@ -211,19 +212,40 @@ exports.getVacancysByPagination = function getVacancysByPagination(req, res, nex
   });
 }
 
-exports.search = function search(req, res, next){
-debug("Search");
-//var query={region: "NA",sector:"Some Sector"};
-var query={};
+exports.search = function search(req, res, next) {
+  debug("Search");
+  //var name =";
+  //     var a = req.query.code;
+  //      if(!name){
+  //         res.status(400);
+  //         res.json({
+  //             error:true,
+  //             msg:"Query Parameter is required",
+  //             status:400
+  //         });
+  //         return;
+  //     }
+  var searchQuery = { code: "maths1111" };
 
- VacancyDal.getCollection(query, function(err, doc) 
- {
-    if (err)
-    {
+  // VacancyDal.getCollection(searchQuery, function(err, doc) 
+  //  {
+  //     if (err)
+  //     {
+  //         res.send(err);
+  //     }
+  //     console.log(doc);
+  //     res.json(doc);
+
+  //  });
+
+  var Vacancy= require('../models/vacancy');
+
+  Vacancy.search({code:'1111'},
+    function (err, doc) {
+      if (err) {
         res.send(err);
-    }
-    console.log(doc);
-    res.json(doc);
-
- });
+      }
+      console.log(doc);
+      res.json(doc);
+    });
 };
