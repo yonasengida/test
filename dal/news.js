@@ -11,7 +11,7 @@
 var debug   = require('debug')('api:dal-News');
 var moment  = require('moment');
 
-var News        = require('../models/News');
+var News        = require('../models/news');
 
 var population = [{
   path: 'user'
