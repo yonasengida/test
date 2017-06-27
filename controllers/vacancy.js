@@ -73,7 +73,7 @@ exports.createVacancy = function createVacancy(req, res, next) {
     req.checkBody('code', 'Invalid Vacancy Code').notEmpty().withMessage('Code should not be Empty')
     req.checkBody('position', 'Invalid Position').notEmpty().withMessage('Position should not be Empty')
     req.checkBody('description', 'Invalid Description').notEmpty().withMessage('Description should not be Empty')
-    req.checkBody('job_category', 'Invalid Job Category').isMongoId('job_category').notEmpty().withMessage('Job Category should not be Empty')
+    req.checkBody('job_category', 'Invalid Job Category').notEmpty().withMessage('Job Category should not be Empty')
     req.checkBody('exprience', 'Invalid  Exprience').notEmpty().withMessage('Exprience should not be Empty')
     req.checkBody('due_date', 'Invalid  Due Date').notEmpty().withMessage('Due Date should not be Empty')
     req.checkBody('level', 'Invalid Level').notEmpty().withMessage('Level should not be Empty')
@@ -228,18 +228,33 @@ exports.search = function search(req, res, next) {
 var mongoose = require('mongoose');
 var _id = mongoose.Types.ObjectId('594fcd658996f20004350d2e');
   VacancyDal.getCollection({
-    $and: [
-       { $or: [{ exprience: { $lte: 2 } }, { exprience: true }] },
-       { $or: [{ exprience: { $gt: 2 } }, { exprience: true }] },
-       { $or: [{ code: true }, { code: "code112232" }] },
-    //  { $or: [{ "job_category.id": true }, { "job_category.id": id}] }
-    //  { $or: [{ "_job_category._id":_id}] }
-    ]
+      job_category: { $elemMatch: {" job_category.name": "maths" } } 
+    // $and: [
+    //    { $or: [{ exprience: { $lte: 2 } }, { exprience: true }] },
+    //    { $or: [{ exprience: { $gt: 2 } }, { exprience: true }] },
+    //    { $or: [{ code: true }, { code: "code112232" }] },
+    // //  { $or: [{ "job_category.id": true }, { "job_category.id": id}] }
+    // //  { $or: [{ "_job_category._id":_id}] }
+    // ]
   }, function (err, doc) {
     if (err) {
       return next(err);
     }3
     res.json(doc);
+    console.log(doc[0].job_category.name)
   });
 
+};
+
+/**
+ * Remove Users
+ */
+exports.removeVacancy = function removeVacancy(req, res, next) {
+  
+  VacancyDal.delete({ _id: req.doc._id }, function remove(err, doc){
+if(err){
+  return next(err);
+}
+res.json(doc);
+  });
 };

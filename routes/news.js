@@ -6,9 +6,9 @@ var news = require('../controllers/news');
 // Create a Router
 var router = express.Router();
 
-router.post('/', news.noop);
+router.post('/', news.createNews);
 
-router.get('/', news.noop);
+router.get('/', news.getNewss);
 
 
 // Export Router

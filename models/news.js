@@ -17,9 +17,10 @@ var Schema = mongoose.Schema;
 // New News Schema Instance
 var NewsSchema = new Schema({
 user:      {type:Schema.Types.ObjectId, ref:'User'},
+title:     { type : String},
 content:   {type: String},
 created_at:{type: Date}
-});
+},{versionKey: false});
 // add middleware to support pagination
 NewsSchema.plugin(paginator);
 // Expose the User Model

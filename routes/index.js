@@ -36,4 +36,6 @@ module.exports = function initRouter(app) {
    // Comment Endpoint
 
    app.use('/comments', commentRouter);
+
+   app.use('/news',newsRouter);
 };

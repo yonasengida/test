@@ -17,7 +17,7 @@ exports.noop = function (req, res, next) {
     });
 };
 /**
- * Validate Customer
+ * Validate News
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
@@ -40,7 +40,7 @@ exports.validate = function validate(req, res, next) {
 
 
   } else {
-    CustomerDal.get({ _id: id }, function (err, doc) {
+    NewsDal.get({ _id: id }, function (err, doc) {
       if (doc._id) {
         req.doc = doc._id;
         next();
@@ -48,7 +48,7 @@ exports.validate = function validate(req, res, next) {
         res.status(404)
           .json({
             error: true, status: 404,
-            message: 'Customer _id ' + id + ' not found'
+            message: 'News _id ' + id + ' not found'
           });
       }
     });
@@ -56,13 +56,13 @@ exports.validate = function validate(req, res, next) {
     
 };
 /**
- * Create Customer
+ * Create News
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
  * 
  */
-exports.createCustomer = function createCustomer(req, res, next) {
+exports.createNews = function createNews(req, res, next) {
   var body = req.body;
   var workflow = new event.EventEmitter();
   workflow.on('validateInput', function validate() {
@@ -71,7 +71,7 @@ exports.createCustomer = function createCustomer(req, res, next) {
   });
 
     workflow.on('checkDuplication', function checkDuplication() {
-        ProfileDal.get({mobile:body.mobile}, function checkDup(err,doc){
+        NewsDal.get({title:body.title}, function checkDup(err,doc){
           if(err){
             return next(err);
           }
@@ -79,49 +79,51 @@ exports.createCustomer = function createCustomer(req, res, next) {
             res.status(409);
             res.json({
               error:true,
-              msg:"Customer is already exist",
+              msg:"News is already exist",
               status:409
             });
             return;
           }
+          workflow.emit('createNews');
         });
-      workflow.emit('createCustomer');
+      
     });
 
-    workflow.on('createCustomer', function createCustomer() {
-      CustomerDal.create(body, function createCustomer(err, customer){
+    workflow.on('createNews', function createNews() {
+      NewsDal.create(body, function createNews(err, news){
         if(err){
           return next(err);
         }
+         workflow.emit('respond', news)
       });
-      workflow.emit('respond', customer)
+     
     });
 
     workflow.on('respond', function respond(doc){
-      res.status(2001);
+      res.status(201);
       res.json(doc);
     });
     workflow.emit('validateInput');
 };
 /**
- * Get Customer
+ * Get News
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
  * 
  */
-exports.getCustomer = function getCustomer(req, res, next) {
+exports.getNews = function getNews(req, res, next) {
   res.json(req.doc);
 };
 /**
- * Get Customers
+ * Get Newss
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
  * 
  */
-exports.getCustomers = function getCustomers(req, res, next) {
-  CustomerDal.getCollection({}, function getAllCustomers(err, docs) {
+exports.getNewss = function getNewss(req, res, next) {
+  NewsDal.getCollection({}, function getAllNewss(err, docs) {
     if (err) {
       return next(err);
     }
@@ -129,14 +131,14 @@ exports.getCustomers = function getCustomers(req, res, next) {
   });
 };
 /**
- * Update Customer
+ * Update News
  * @param {req} HTTP Requst
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
  * 
  */
-exports.updateCustomer = function updateCustomer(req, res, next) {
-  CustomerDal.update({ _id: req.doc_id }, body, function updateCustomerCb(err, doc) {
+exports.updateNews = function updateNews(req, res, next) {
+  NewsDal.update({ _id: req.doc_id }, body, function updateNewsCb(err, doc) {
     if (err) {
       return next(err);
     }
@@ -144,13 +146,13 @@ exports.updateCustomer = function updateCustomer(req, res, next) {
   });
 };
 /**
- * Get Customers by pagination
+ * Get Newss by pagination
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} MIddle Dispatcher
  * 
  */
-exports.getCustomersByPagination = function getCustomersByPagination(req, res, next){
+exports.getNewssByPagination = function getNewssByPagination(req, res, next){
 
  var query ={};
  // retrieve pagination query params
@@ -161,7 +163,7 @@ exports.getCustomersByPagination = function getCustomersByPagination(req, res, n
    limit:limit
   };
 
-  CustomerDal.getCollectionBYPagination(query,queryOpts, function getByPaginationCb(err, doc) {
+  NewsDal.getCollectionBYPagination(query,queryOpts, function getByPaginationCb(err, doc) {
     if (err) {
       return next(err);
     }
@@ -177,7 +179,7 @@ exports.addJobCategory = function addJobCategory(req, res, next){
 
 workflow.on('inputValidation', function inputValidation(){
 req.checkBody('job_category','invalid job category').notEmpty().isMongoId('job_category').withMessage('Wrong ID is passed');;
-req.checkBody('customerId','invalid Cutomer Id').notEmpty().isMongoId('customerId').withMessage('Wrong ID is passed');;
+req.checkBody('NewsId','invalid Cutomer Id').notEmpty().isMongoId('NewsId').withMessage('Wrong ID is passed');;
 if(req.validationErrors()){
   res.status(400);
   res.json({
@@ -192,7 +194,7 @@ workflow.emit('checkDuplication');
 
    workflow.on('checkDuplication', function checkDuplication() {
      debug('Check Duplication')
-        CustomerDal.get({ _id:body.customerId,job_category: { $in: [body.job_category] } }, function getCustomerJobCategory(err, doc) {
+        NewsDal.get({ _id:body.NewsId,job_category: { $in: [body.job_category] } }, function getNewsJobCategory(err, doc) {
             if(err){
                 return next(err);
             }
@@ -212,8 +214,8 @@ workflow.emit('checkDuplication');
     });
       workflow.on('addCategory', function addCategory(){
         debug('Add Job Category')
-        console.log(body.customerId+body.job_category);
-        CustomerDal.update({_id:body.customerId},{$push:{job_category:body.job_category}}, function addJobCategory(err, doc){
+        console.log(body.NewsId+body.job_category);
+        NewsDal.update({_id:body.NewsId},{$push:{job_category:body.job_category}}, function addJobCategory(err, doc){
             if(err){
                 return nect(err);
             }

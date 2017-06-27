@@ -235,7 +235,7 @@ router.get('/:id', vacancy.getVacancy);
 router.put('/:id', vacancy.updateVacancy);
 
 // DELETE /vacancies/:id
-router.delete('/:id', vacancy.noop);
+router.delete('/:id', vacancy.removeVacancy);
 // Export Router
 module.exports = router;
 

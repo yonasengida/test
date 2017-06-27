@@ -310,6 +310,7 @@ exports.updateUser = function updateUser(req, res, next) {
  * Remove Users
  */
 exports.removeUser = function removeUser(req, res, next) {
+  
 };
 
 

@@ -63,7 +63,7 @@ exports.delete = function deleteItem(query, cb) {
   debug('deleting Vacancy: ');
 
   Vacancy
-    .findOne(query, returnFields)
+    .findOne(query)
     .populate(population)
     .exec(function deleteVacancy(err, vacancy) {
       if (err) {
