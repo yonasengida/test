@@ -23,8 +23,8 @@ var VacancySchema = new Schema({
                        index: true,
                       searchable: true },
     description:    { type: String },
-    //job_category:   {type:Schema.Types.ObjectId, ref:'JobCategory'},
-    job_category:   { type:String},
+ 
+    category:  { type:String},
     exprience:      { type:Number,
                       index: true,
                       searchable: true },

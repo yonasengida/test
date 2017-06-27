@@ -65,7 +65,7 @@ exports.validate = function validate(req, res, next, id) {
  * 
  */
 exports.createVacancy = function createVacancy(req, res, next) {
-
+console.log('check Input')
   var body = req.body;
   var workflow = new event.EventEmitter();
   workflow.on('validateInput', function validate() {
@@ -73,7 +73,7 @@ exports.createVacancy = function createVacancy(req, res, next) {
     req.checkBody('code', 'Invalid Vacancy Code').notEmpty().withMessage('Code should not be Empty')
     req.checkBody('position', 'Invalid Position').notEmpty().withMessage('Position should not be Empty')
     req.checkBody('description', 'Invalid Description').notEmpty().withMessage('Description should not be Empty')
-    req.checkBody('job_category', 'Invalid Job Category').notEmpty().withMessage('Job Category should not be Empty')
+    req.checkBody('category', 'Invalid Job Category').notEmpty().withMessage('Job Category should not be Empty')
     req.checkBody('exprience', 'Invalid  Exprience').notEmpty().withMessage('Exprience should not be Empty')
     req.checkBody('due_date', 'Invalid  Due Date').notEmpty().withMessage('Due Date should not be Empty')
     req.checkBody('level', 'Invalid Level').notEmpty().withMessage('Level should not be Empty')
@@ -87,52 +87,38 @@ exports.createVacancy = function createVacancy(req, res, next) {
       });
       return;
     }
-
-    workflow.emit('checkDuplication');
+console.log(body);
+  workflow.emit('createVacancy');
   });
 
-  workflow.on('checkDuplication', function checkDuplication() {
-    debug('Check Duplication');
-    VacancyDal.get({ code: body.code }, function checkDup(err, doc) {
-      if (err) {
-        return next(err);
-      }
-      if (doc._id) {
-        res.status(409);
-        res.json({
-          error: true,
-          msg: "Vacancy is already exist",
-          status: 409
-        });
-        return;
-      } else {
-        workflow.emit('checkJobCategoryExistence');
-      }
-    });
+  // workflow.on('checkDuplication', function checkDuplication() {
+  //   debug('Check Duplication');
+  //   console.log('check Duplication')
+  //   VacancyDal.get({ code: body.code }, function checkDup(err, doc) {
+  //     if (err) {
+  //       return next(err);
+  //     }
+  //     if (doc._id) {
+  //       res.status(409);
+  //       res.json({
+  //         error: true,
+  //         msg: "Vacancy is already exist",
+  //         status: 409
+  //       });
+  //       return;
+  //     } else {
+  //        console.log('Call Create Vacancy')
+  //       workflow.emit('createVacancy');
+  //     }
+  //   });
 
-  });
-  workflow.on('checkJobCategoryExistence', function checkJC() {
-    JobcategoryDal.get({ _id: body.job_category }, function getJobCategory(err, doc) {
-      if (err) {
-        return next(err);
-      }
-      if (!doc.id) {
-        res.json({
-          error: true,
-          msg: "Job Category IS not Found",
-          status: 404
-        });
-        return;
-      } else {
-        workflow.emit('createVacancy');
-      }
-
-    });
-
-  });
+  // });
+ 
   workflow.on('createVacancy', function createVacancy() {
+     console.log('Create Vacancy')
     debug('Create Vacancy');
     VacancyDal.create(body, function createVacancy(err, doc) {
+      console.log(body);
       if (err) {
         return next(err);
       }
