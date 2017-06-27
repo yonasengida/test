@@ -1,7 +1,7 @@
 // Load Module Dependencies
 var event = require('events');
 var debug = require('debug')('eagles-api:Controllers');;
-var CommentDal    = require('../dal/comment');
+var NewsDal    = require('../dal/news');
 var ProfileDal     = require('../dal/profile');
 
 /**
@@ -17,7 +17,7 @@ exports.noop = function (req, res, next) {
     });
 };
 /**
- * Validate Comment
+ * Validate Customer
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
@@ -40,7 +40,7 @@ exports.validate = function validate(req, res, next) {
 
 
   } else {
-    CommentDal.get({ _id: id }, function (err, doc) {
+    CustomerDal.get({ _id: id }, function (err, doc) {
       if (doc._id) {
         req.doc = doc._id;
         next();
@@ -48,7 +48,7 @@ exports.validate = function validate(req, res, next) {
         res.status(404)
           .json({
             error: true, status: 404,
-            message: 'Comment _id ' + id + ' not found'
+            message: 'Customer _id ' + id + ' not found'
           });
       }
     });
@@ -56,69 +56,72 @@ exports.validate = function validate(req, res, next) {
     
 };
 /**
- * Create Comment
+ * Create Customer
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
  * 
  */
-exports.createComment = function createComment(req, res, next) {
+exports.createCustomer = function createCustomer(req, res, next) {
   var body = req.body;
   var workflow = new event.EventEmitter();
   workflow.on('validateInput', function validate() {
-    debug('validate Comment Input');
-    req.checkBody('content', 'Content  should not be empty!')
-      .notEmpty();
 
-    req.checkBody('contact', 'Contact  should not be empty!')
-      .notEmpty();
-    var validationErrors = req.validationErrors();
-
-    if (validationErrors) {
-      res.status(400);
-      res.json(validationErrors);
-    }
-    else {
-      workflow.emit('createComment');
-    }
-    
+    workflow.emit('checkDuplication');
   });
 
-   
+    workflow.on('checkDuplication', function checkDuplication() {
+        ProfileDal.get({mobile:body.mobile}, function checkDup(err,doc){
+          if(err){
+            return next(err);
+          }
+          if(doc._id){
+            res.status(409);
+            res.json({
+              error:true,
+              msg:"Customer is already exist",
+              status:409
+            });
+            return;
+          }
+        });
+      workflow.emit('createCustomer');
+    });
 
-    workflow.on('createComment', function createComment() {
-      CommentDal.create(body, function createComment(err, doc){
+    workflow.on('createCustomer', function createCustomer() {
+      CustomerDal.create(body, function createCustomer(err, customer){
         if(err){
           return next(err);
         }
-        res.status(201);
-        res.json(doc);
-       });
-  
+      });
+      workflow.emit('respond', customer)
     });
 
-    
+    workflow.on('respond', function respond(doc){
+      res.status(2001);
+      res.json(doc);
+    });
     workflow.emit('validateInput');
 };
 /**
- * Get Comment
+ * Get Customer
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
  * 
  */
-exports.getComment = function getComment(req, res, next) {
+exports.getCustomer = function getCustomer(req, res, next) {
   res.json(req.doc);
 };
 /**
- * Get Comments
+ * Get Customers
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
  * 
  */
-exports.getComments = function getComments(req, res, next) {
-  CommentDal.getCollection({}, function getAllComments(err, docs) {
+exports.getCustomers = function getCustomers(req, res, next) {
+  CustomerDal.getCollection({}, function getAllCustomers(err, docs) {
     if (err) {
       return next(err);
     }
@@ -126,14 +129,14 @@ exports.getComments = function getComments(req, res, next) {
   });
 };
 /**
- * Update Comment
+ * Update Customer
  * @param {req} HTTP Requst
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
  * 
  */
-exports.updateComment = function updateComment(req, res, next) {
-  CommentDal.update({ _id: req.doc_id }, body, function updateCommentCb(err, doc) {
+exports.updateCustomer = function updateCustomer(req, res, next) {
+  CustomerDal.update({ _id: req.doc_id }, body, function updateCustomerCb(err, doc) {
     if (err) {
       return next(err);
     }
@@ -141,13 +144,13 @@ exports.updateComment = function updateComment(req, res, next) {
   });
 };
 /**
- * Get Comments by pagination
+ * Get Customers by pagination
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} MIddle Dispatcher
  * 
  */
-exports.getCommentsByPagination = function getCommentsByPagination(req, res, next){
+exports.getCustomersByPagination = function getCustomersByPagination(req, res, next){
 
  var query ={};
  // retrieve pagination query params
@@ -158,7 +161,7 @@ exports.getCommentsByPagination = function getCommentsByPagination(req, res, nex
    limit:limit
   };
 
-  CommentDal.getCollectionBYPagination(query,queryOpts, function getByPaginationCb(err, doc) {
+  CustomerDal.getCollectionBYPagination(query,queryOpts, function getByPaginationCb(err, doc) {
     if (err) {
       return next(err);
     }
@@ -174,7 +177,7 @@ exports.addJobCategory = function addJobCategory(req, res, next){
 
 workflow.on('inputValidation', function inputValidation(){
 req.checkBody('job_category','invalid job category').notEmpty().isMongoId('job_category').withMessage('Wrong ID is passed');;
-req.checkBody('CommentId','invalid Cutomer Id').notEmpty().isMongoId('CommentId').withMessage('Wrong ID is passed');;
+req.checkBody('customerId','invalid Cutomer Id').notEmpty().isMongoId('customerId').withMessage('Wrong ID is passed');;
 if(req.validationErrors()){
   res.status(400);
   res.json({
@@ -189,7 +192,7 @@ workflow.emit('checkDuplication');
 
    workflow.on('checkDuplication', function checkDuplication() {
      debug('Check Duplication')
-        CommentDal.get({ _id:body.CommentId,job_category: { $in: [body.job_category] } }, function getCommentJobCategory(err, doc) {
+        CustomerDal.get({ _id:body.customerId,job_category: { $in: [body.job_category] } }, function getCustomerJobCategory(err, doc) {
             if(err){
                 return next(err);
             }
@@ -209,8 +212,8 @@ workflow.emit('checkDuplication');
     });
       workflow.on('addCategory', function addCategory(){
         debug('Add Job Category')
-        console.log(body.CommentId+body.job_category);
-        CommentDal.update({_id:body.CommentId},{$push:{job_category:body.job_category}}, function addJobCategory(err, doc){
+        console.log(body.customerId+body.job_category);
+        CustomerDal.update({_id:body.customerId},{$push:{job_category:body.job_category}}, function addJobCategory(err, doc){
             if(err){
                 return nect(err);
             }

@@ -1,4 +1,4 @@
-// Access Layer for Comment Data.
+// Access Layer for News Data.
 
 // NOTES:
 // .population() specifies the references that you want
@@ -8,41 +8,41 @@
 /**
  * Load Module Dependencies.
  */
-var debug   = require('debug')('api:dal-Comment');
+var debug   = require('debug')('api:dal-News');
 var moment  = require('moment');
 
-var Comment        = require('../models/comment');
+var News        = require('../models/News');
 
 var population = [{
   path: 'user'
 }];
 /**
- * create a new Comment.
+ * create a new NMews.
  *
- * @desc  creates a new Comment and saves them
+ * @desc  creates a new News and saves them
  *        in the database
  *
- * @param {Object}  CommentData  Data for the Comment to create
+ * @param {Object}  NewsData  Data for the News to create
  * @param {Function} cb       Callback for once saving is complete
  */
-exports.create = function create(CommentData, cb) {
-  debug('creating a new Comment');
+exports.create = function create(NewsData, cb) {
+  debug('creating a new News');
 
-  // Create Comment
-  var CommentModel  = new Comment(CommentData);
+  // Create News
+  var NewsModel  = new News(NewsData);
 
-  CommentModel.save(function saveComment(err, data) {
+  NewsModel.save(function saveNews(err, data) {
     if (err) {
       return cb(err);
     }
 
 
-    exports.get({ _id: data._id }, function (err, Comment) {
+    exports.get({ _id: data._id }, function (err, News) {
       if(err) {
         return cb(err);
       }
 
-      cb(null, Comment);
+      cb(null, News);
 
     });
 
@@ -51,35 +51,35 @@ exports.create = function create(CommentData, cb) {
 };
 
 /**
- * delete a Comment
+ * delete a News
  *
- * @desc  delete data of the Comment with the given
+ * @desc  delete data of the News with the given
  *        id
  *
  * @param {Object}  query   Query Object
  * @param {Function} cb Callback for once delete is complete
  */
 exports.delete = function deleteItem(query, cb) {
-  debug('deleting Comment: ');
+  debug('deleting News: ');
 
-  Comment
+  News
     .findOne(query, returnFields)
     .populate(population)
-    .exec(function deleteComment(err, Comment) {
+    .exec(function deleteNews(err, News) {
       if (err) {
         return cb(err);
       }
 
-      if(!Comment) {
+      if(!News) {
         return cb(null, {});
       }
 
-      Comment.remove(function(err) {
+      News.remove(function(err) {
         if(err) {
           return cb(err);
         }
 
-        cb(null, Comment);
+        cb(null, News);
 
       });
 
@@ -87,9 +87,9 @@ exports.delete = function deleteItem(query, cb) {
 };
 
 /**
- * update a Comment
+ * update a News
  *
- * @desc  update data of the Comment with the given
+ * @desc  update data of the News with the given
  *        id
  *
  * @param {Object} query Query object
@@ -97,73 +97,73 @@ exports.delete = function deleteItem(query, cb) {
  * @param {Function} cb Callback for once update is complete
  */
 exports.update = function update(query, updates, cb) {
-  debug('updating Comment: ');
+  debug('updating News: ');
 
   var now = moment().toISOString();
 
   updates.last_modified = now;
 
-  Comment
+  News
     .findOneAndUpdate(query, updates)
     .populate(population)
-    .exec(function updateComment(err, Comment) {
+    .exec(function updateNews(err, News) {
       if(err) {
         return cb(err);
       }
 
-      cb(null, Comment || {});
+      cb(null, News || {});
     });
 };
 
 /**
- * get a Comment.
+ * get a News.
  *
- * @desc get a Comment with the given id from db
+ * @desc get a News with the given id from db
  *
  * @param {Object} query Query Object
  * @param {Function} cb Callback for once fetch is complete
  */
 exports.get = function get(query, cb) {
-  debug('getting Comment ');
+  debug('getting News ');
 
-  Comment
+  News
     .findOne(query)
     .populate(population)
-    .exec(function(err, Comment) {
+    .exec(function(err, News) {
       if(err) {
         return cb(err);
       }
 
-      cb(null, Comment || {});
+      cb(null, News || {});
     });
 };
 
 /**
- * get a collection of Comments
+ * get a collection of Newss
  *
- * @desc get a collection of Comments from db
+ * @desc get a collection of Newss from db
  *
  * @param {Object} query Query Object
  * @param {Function} cb Callback for once fetch is complete
  */
 exports.getCollection = function getCollection(query, cb) {
-  debug('fetching a collection of Comments');
+  debug('fetching a collection of Newss');
 
-  Comment.find(query)
+  News.find(query)
     .populate(population)
-    .exec(function getCommentsCollection(err, Comments) {
+    .exec(function getNewssCollection(err, Newss) {
       if(err) {
         return cb(err);
       }
       
-      return cb(null, Comments);
+      return cb(null, Newss);
   });
 
 };
 
 exports.getCollectionBYPagination = function getCollectionBYPagination(query,queryOpts, cb) {
 
-  Comment.paginate(query, queryOpts, function (err, result) {
+  News.paginate(query, queryOpts, function (err, result) {
     // result.docs
     // result.total
     // result.limit - 10

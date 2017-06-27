@@ -9,6 +9,8 @@ var vacancyRouter       = require('./vacancy');
 //var playerRouter     = require('./player');
 var profileRouter    = require('./profile');
 var staffRouter      = require('./staff');
+var commentRouter    = require('./comment');
+var newsRouter    = require('./news');
 
 // Export Router Initializater
 module.exports = function initRouter(app) {
@@ -30,4 +32,8 @@ module.exports = function initRouter(app) {
 
   // Staff Endpoint
    app.use('/staffs', staffRouter);
+
+   // Comment Endpoint
+
+   app.use('/comments', commentRouter);
 };

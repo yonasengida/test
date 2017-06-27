@@ -225,27 +225,21 @@ exports.search = function search(req, res, next) {
   //         });
   //         return;
   //     }
-  var searchQuery = { code: "maths1111" };
+var mongoose = require('mongoose');
+var _id = mongoose.Types.ObjectId('594fcd658996f20004350d2e');
+  VacancyDal.getCollection({
+    $and: [
+       { $or: [{ exprience: { $lte: 2 } }, { exprience: true }] },
+       { $or: [{ exprience: { $gt: 2 } }, { exprience: true }] },
+       { $or: [{ code: true }, { code: "code112232" }] },
+    //  { $or: [{ "job_category.id": true }, { "job_category.id": id}] }
+    //  { $or: [{ "_job_category._id":_id}] }
+    ]
+  }, function (err, doc) {
+    if (err) {
+      return next(err);
+    }3
+    res.json(doc);
+  });
 
-  // VacancyDal.getCollection(searchQuery, function(err, doc) 
-  //  {
-  //     if (err)
-  //     {
-  //         res.send(err);
-  //     }
-  //     console.log(doc);
-  //     res.json(doc);
-
-  //  });
-
-  var Vacancy= require('../models/vacancy');
-
-  Vacancy.search({code:'1111'},
-    function (err, doc) {
-      if (err) {
-        res.send(err);
-      }
-      console.log(doc);
-      res.json(doc);
-    });
 };
