@@ -13,9 +13,9 @@ var moment  = require('moment');
 
 var Vacancy        = require('../models/vacancy');
 
-var population = [{
+var population = [
  // path: 'job_category'
-}];
+];
 /**
  * create a new Vacancy.
  *
