@@ -30,7 +30,7 @@ var VacancySchema = new Schema({
                       searchable: true },
     qualifications: { type:String},
     status:         { type:String},
-    due_date:       { type:String},
+    due_date:       { type:Date},
     salary:         { type:String},
     number_required:{ type:String},
     contact:        { type:String},

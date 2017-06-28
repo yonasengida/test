@@ -11,8 +11,6 @@ var router = express.Router();
  * @api {post} /vacancies  Create Vacancy
  * @apiName CreateVacancy
  * @apiGroup Vacancy
- *
- *
  * @apiParam {String} code Vacancy Code
  * @apiParam {String} position Positions for vacancy
  * @apiParam {String} description Vacancy Description 
@@ -219,7 +217,6 @@ router.get('/paginate',vacancy.getVacancysByPagination)
         "level": "level1"
     }
 ]
- 
 */
 router.get('/search',vacancy.search)
 

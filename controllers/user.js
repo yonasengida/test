@@ -186,6 +186,7 @@ exports.createUser = function createUser(req, res, next) {
     debug('Create User Type');
     // Create User Type
     var now = moment().toISOString();
+    
     if (body.user_type === 'staff') {
       StaffDal.create({
         profile: profile._id,

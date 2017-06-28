@@ -20,7 +20,7 @@ var population = [
  * create a new Vacancy.
  *
  * @desc  creates a new Vacancy and saves them
- *        in the database
+ *        in the databasex
  *
  * @param {Object}  VacancyData  Data for the Vacancy to create
  * @param {Function} cb       Callback for once saving is complete

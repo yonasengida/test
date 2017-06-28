@@ -1,6 +1,7 @@
 // Load Module Dependencies
 'use strict';
 var event = require('events');
+var moment = require('moment');
 var debug = require('debug')('eagles-api:vacancy-controller')
 var VacancyDal = require('../dal/vacancy');
 var JobcategoryDal = require('../dal/jobcategory');
@@ -107,7 +108,7 @@ console.log(body);
         });
         return;
       } else {
-         console.log('Call Create Vacancy')
+         
         workflow.emit('createVacancy');
       }
     });
@@ -117,6 +118,7 @@ console.log(body);
   workflow.on('createVacancy', function createVacancy() {
      console.log('Create Vacancy')
     debug('Create Vacancy');
+
     VacancyDal.create(body, function createVacancy(err, doc) {
     
       if (err) {
