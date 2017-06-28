@@ -88,37 +88,37 @@ console.log('check Input')
       return;
     }
 console.log(body);
-  workflow.emit('createVacancy');
+  workflow.emit('checkDuplication');
   });
 
-  // workflow.on('checkDuplication', function checkDuplication() {
-  //   debug('Check Duplication');
-  //   console.log('check Duplication')
-  //   VacancyDal.get({ code: body.code }, function checkDup(err, doc) {
-  //     if (err) {
-  //       return next(err);
-  //     }
-  //     if (doc._id) {
-  //       res.status(409);
-  //       res.json({
-  //         error: true,
-  //         msg: "Vacancy is already exist",
-  //         status: 409
-  //       });
-  //       return;
-  //     } else {
-  //        console.log('Call Create Vacancy')
-  //       workflow.emit('createVacancy');
-  //     }
-  //   });
+  workflow.on('checkDuplication', function checkDuplication() {
+    debug('Check Duplication');
+    console.log('check Duplication')
+    VacancyDal.get({ code: body.code }, function checkDup(err, doc) {
+      if (err) {
+        return next(err);
+      }
+      if (doc._id) {
+        res.status(409);
+        res.json({
+          error: true,
+          msg: "Vacancy is already exist",
+          status: 409
+        });
+        return;
+      } else {
+         console.log('Call Create Vacancy')
+        workflow.emit('createVacancy');
+      }
+    });
 
-  // });
+  });
  
   workflow.on('createVacancy', function createVacancy() {
      console.log('Create Vacancy')
     debug('Create Vacancy');
     VacancyDal.create(body, function createVacancy(err, doc) {
-      console.log(body);
+    
       if (err) {
         return next(err);
       }
@@ -200,35 +200,36 @@ exports.getVacancysByPagination = function getVacancysByPagination(req, res, nex
 
 exports.search = function search(req, res, next) {
   debug("Search");
-  //var name =";
-  //     var a = req.query.code;
-  //      if(!name){
-  //         res.status(400);
-  //         res.json({
-  //             error:true,
-  //             msg:"Query Parameter is required",
-  //             status:400
-  //         });
-  //         return;
-  //     }
+  
+      var exprienceFrom = req.query.from;
+      var exprienceTo = req.query.to;
+      var category = req.query.category;
+      var level = req.query.level;
+       if(!exprienceFrom ||!exprienceTo||!category||!level){
+          res.status(400);
+          res.json({
+              error:true,
+              msg:"Query Parameter is required",
+              status:400
+          });
+          return;
+      }
 var mongoose = require('mongoose');
 var _id = mongoose.Types.ObjectId('594fcd658996f20004350d2e');
   VacancyDal.getCollection({
-      job_category: { $elemMatch: {" job_category.name": "maths" } } 
-    // $and: [
-    //    { $or: [{ exprience: { $lte: 2 } }, { exprience: true }] },
-    //    { $or: [{ exprience: { $gt: 2 } }, { exprience: true }] },
-    //    { $or: [{ code: true }, { code: "code112232" }] },
-    // //  { $or: [{ "job_category.id": true }, { "job_category.id": id}] }
-    // //  { $or: [{ "_job_category._id":_id}] }
-    // ]
+        $and: [
+       { $or: [{ exprience: { $lte: exprienceTo } }, { exprience: true }] },
+       { $or: [{ exprience: { $gt: exprienceFrom } }, { exprience: true }] },
+       { $or: [{ category: true }, { category: category }] },
+       { $or: [{ level: true }, { level: level }] },
+   
+    ]
   }, function (err, doc) {
     if (err) {
       return next(err);
     }3
     res.json(doc);
-    console.log(doc[0].job_category.name)
-  });
+    });
 
 };
 

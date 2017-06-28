@@ -23,6 +23,7 @@ mongoose.connection.on('error', function mongodbErrorListener() {
   console.log("Connection to Mongodb Failed!!")
   // Try and Reconnect
   mongoose.connect(config.MONGODB_URL);
+ // mongoose.connect(config.MONGODB_UR, { useMongoClient: true, /* other options */ })
 
 });
 
