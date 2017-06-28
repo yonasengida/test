@@ -16,8 +16,8 @@ var router = express.Router();
  * @apiParam {String} code Vacancy Code
  * @apiParam {String} position Positions for vacancy
  * @apiParam {String} description Vacancy Description 
- * @apiParam {String} job_category Vacancy Job Category
- * @apiParam {String} exprience Exprience
+ * @apiParam {String} category Vacancy Job Category
+ * @apiParam {Number} exprience Exprience
  * @apiParam {String} qualification Qualification
  * @apiParam {Date}   due_date Vacancy Due Date
  * @apiParam {Number} [salary] Users Country
@@ -31,8 +31,8 @@ var router = express.Router();
         "code":      "code112232",
         "position":     "position1",
         "description": "descrption1",
-        "job_category": "jobcategory1",
-        "exprience":   "exprience1",
+        "category": "jobcategory1",
+        "exprience":   "1",
         "qualifications":"qualification1",
         "due_date":  "duedate",
         "salary":        "salary1",
@@ -153,6 +153,74 @@ router.get('/', vacancy.getVacancies);
     }
  */
 router.get('/paginate',vacancy.getVacancysByPagination)
+/**
+ * @apiDescription This Endpoint is allow to Search Vacancies with Different Parameters
+ * @api {get} /vacancies/search?category=<parameter>&from=<parameter>&to=<parameter>&level=<parameter> Search Vacancies
+ * 
+ * @apiName Search Vacancy
+ * @apiGroup Vacancy
+ * 
+ * @apiParam {String}  category  Vacancy Category
+ * @apiParam {Number}  from  Exprience From
+ * @apiParam {Number}  to  Exprience To
+ * @apiParam {String}  level  Vacancy Level
+  * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ [
+    {
+        "_id": "5953628d352eae2e7bbb7aab",
+        "code": "coo00umasir1",
+        "position": "position3",
+        "description": "descrption1",
+        "category": "591a20a1e2f1de129aea0e0d",
+        "exprience": 111,
+        "qualifications": "qualification1",
+        "status": "status1",
+        "due_date": "duedate",
+        "salary": "salary1",
+        "number_required": "12",
+        "contact": "0930015100",
+        "mobile": "mobile1",
+        "email": "email",
+        "level": "level1"
+    },
+    {
+        "_id": "595263fc64d5db126736034a",
+        "code": "coo00umasir1",
+        "position": "position3",
+        "description": "descrption1",
+        "category": "591a20a1e2f1de129aea0e0d",
+        "exprience": 111,
+        "qualifications": "qualification1",
+        "status": "status1",
+        "due_date": "duedate",
+        "salary": "salary1",
+        "number_required": "12",
+        "contact": "0930015100",
+        "mobile": "mobile1",
+        "email": "email",
+        "level": "level1"
+    },
+    {
+        "_id": "59536291352eae2e7bbb7aac",
+        "code": "coo00umasir1",
+        "position": "position3",
+        "description": "descrption1",
+        "category": "591a20a1e2f1de129aea0e0d",
+        "exprience": 111,
+        "qualifications": "qualification1",
+        "status": "status1",
+        "due_date": "duedate",
+        "salary": "salary1",
+        "number_required": "12",
+        "contact": "0930015100",
+        "mobile": "mobile1",
+        "email": "email",
+        "level": "level1"
+    }
+]
+ 
+*/
 router.get('/search',vacancy.search)
 
 router.param('id', vacancy.validate)
