@@ -17,7 +17,6 @@
             cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
         }
     });
-
     var upload = multer({ //multer settings
                     storage: storage,
                     fileFilter : function(req, file, callback) { //file filter
