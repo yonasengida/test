@@ -59,14 +59,15 @@ router.post('/login', auth.login);
  * @apiParam {string} [realem] Users Group
  * @apiParam {string} first_name Users First Name
  * @apiParam {string} last_name Users last_name 
- * @apiParam {string} [email] Users email
- * @apiParam {Date}   [date_of_birth] Users Date of Birth
- * @apiParam {string} [city] Users City
- * @apiParam {string} [country] Users Country
- * @apiParam {string} [mobile] Users Mobile
- * @apiParam {string} [gender] Users Gender
+ * @apiParam {string} email] Users email
+ * @apiParam {Date}   date_of_birth Users Date of Birth
+ * @apiParam {string} city] Users City
+ * @apiParam {string} country Users Country
+ * @apiParam {string} mobile Users Mobile
+ * @apiParam {string} gender Users Gender
  * @apiParam {string} user_type User Type , Like Staff, customer
- * 
+ * @apiParam {Number} exprience Customer Exprience
+ * @apiParam {String} level Customer Qualification Level
  * @apiParamExample Request Exmaple
  * {
  *   "password":"pass@123",

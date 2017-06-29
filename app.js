@@ -29,6 +29,7 @@ mongoose.connection.on('error', function mongodbErrorListener() {
 
 // Initialize app
 var app = express();
+app.use(express.static('docs'))
 
 // //Authentication Middleware
 app.use(authenticate({set_auth:false}).unless({

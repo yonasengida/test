@@ -540,42 +540,42 @@
           {
             "group": "Parameter",
             "type": "string",
-            "optional": true,
+            "optional": false,
             "field": "email",
             "description": "<p>Users email</p>"
           },
           {
             "group": "Parameter",
             "type": "Date",
-            "optional": true,
+            "optional": false,
             "field": "date_of_birth",
             "description": "<p>Users Date of Birth</p>"
           },
           {
             "group": "Parameter",
             "type": "string",
-            "optional": true,
+            "optional": false,
             "field": "city",
             "description": "<p>Users City</p>"
           },
           {
             "group": "Parameter",
             "type": "string",
-            "optional": true,
+            "optional": false,
             "field": "country",
             "description": "<p>Users Country</p>"
           },
           {
             "group": "Parameter",
             "type": "string",
-            "optional": true,
+            "optional": false,
             "field": "mobile",
             "description": "<p>Users Mobile</p>"
           },
           {
             "group": "Parameter",
             "type": "string",
-            "optional": true,
+            "optional": false,
             "field": "gender",
             "description": "<p>Users Gender</p>"
           },
@@ -585,6 +585,20 @@
             "optional": false,
             "field": "user_type",
             "description": "<p>User Type , Like Staff, customer</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "exprience",
+            "description": "<p>Customer Exprience</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "level",
+            "description": "<p>Customer Qualification Level</p>"
           }
         ]
       },
