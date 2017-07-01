@@ -226,7 +226,7 @@ var _id = mongoose.Types.ObjectId('594fcd658996f20004350d2e');
        { $or: [{ level: true }, { level: level }] },
    
     ]
-  }, function (err, doc) {
+  }.sort('due_date', 'descending'), function (err, doc) {
     if (err) {
       return next(err);
     }3

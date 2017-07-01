@@ -129,6 +129,7 @@ exports.get = function get(query, cb) {
   Vacancy
     .findOne(query)
     .populate(population)
+    .sort({due_date: 'desc'})
     .exec(function(err, vacancy) {
       if(err) {
         return cb(err);
@@ -151,6 +152,7 @@ exports.getCollection = function getCollection(query, cb) {
 
   Vacancy.find(query)
     .populate(population)
+    .sort({due_date: 'desc'})
     .exec(function getVacancysCollection(err, vacancies) {
       if(err) {
         return cb(err);
