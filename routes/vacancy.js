@@ -111,6 +111,7 @@ router.post('/', vacancy.createVacancy);
     }
  */
 router.get('/', vacancy.getVacancies);
+router.get('/open',vacancy.getOPenVacancies)
 /**
  * @apiDescription This Endpoint is allow to Get Vacancy Collection by Pagination. Use parameters to query with pagination :- page=<RESULTS_PAGE> and 
  * per_page=<RESULTS_PER_PAGE>.

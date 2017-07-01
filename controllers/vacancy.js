@@ -150,7 +150,24 @@ exports.getVacancy = function getVacancy(req, res, next) {
  * 
  */
 exports.getVacancies = function getVacancies(req, res, next) {
-  VacancyDal.getCollection({}, function getAllVacancy(err, docs) {
+  var opt={};
+  VacancyDal.getCollection({},opt, function getAllVacancy(err, docs) {
+    if (err) {
+      return next(err);
+    }
+    res.json(docs);
+  });
+};
+/**
+ * Get Open Vacancys
+ * @param {req} HTTP Request
+ * @param {res} HTTP Response
+ * @param {next} Middleware Dispatcher
+ * 
+ */
+exports.getOPenVacancies = function getOpenVacancies(req, res, next) {
+  var opt='description due_date category qualifications exprience position ';
+  VacancyDal.getCollection({},opt, function getAllOpenVacancy(err, docs) {
     if (err) {
       return next(err);
     }

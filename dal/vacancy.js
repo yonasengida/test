@@ -147,10 +147,10 @@ exports.get = function get(query, cb) {
  * @param {Object} query Query Object
  * @param {Function} cb Callback for once fetch is complete
  */
-exports.getCollection = function getCollection(query, cb) {
+exports.getCollection = function getCollection(query,options, cb) {
   debug('fetching a collection of Vacancys');
 
-  Vacancy.find(query)
+  Vacancy.find(query,options)
     .populate(population)
     .sort({due_date: 'desc'})
     .exec(function getVacancysCollection(err, vacancies) {
