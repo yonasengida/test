@@ -166,7 +166,7 @@ exports.getVacancies = function getVacancies(req, res, next) {
  * 
  */
 exports.getOPenVacancies = function getOpenVacancies(req, res, next) {
-  var opt='description due_date category qualifications exprience position ';
+  var opt='description due_date category qualifications exprience position level';
   VacancyDal.getCollection({},opt, function getAllOpenVacancy(err, docs) {
     if (err) {
       return next(err);
