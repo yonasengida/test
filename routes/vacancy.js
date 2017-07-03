@@ -220,6 +220,70 @@ router.get('/paginate',vacancy.getVacancysByPagination)
 ]
 */
 router.get('/search',vacancy.search)
+/**
+ * @apiDescription This Endpoint is allow to Search Vacancies By Categroy
+ * @api {get} /vacancies/searchByCategory?category=<parameter> Search Vacancies By Category
+ * 
+ * @apiName Search Vacancy by Catgeory
+ * @apiGroup Vacancy
+ * 
+ * @apiParam {String}  category  Vacancy Category
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ [
+    {
+        "_id": "5953628d352eae2e7bbb7aab",
+        "code": "coo00umasir1",
+        "position": "position3",
+        "description": "descrption1",
+        "category": "591a20a1e2f1de129aea0e0d",
+        "exprience": 111,
+        "qualifications": "qualification1",
+        "status": "status1",
+        "due_date": "duedate",
+        "salary": "salary1",
+        "number_required": "12",
+        "contact": "0930015100",
+        "mobile": "mobile1",
+        "email": "email",
+        "level": "level1"
+    },
+    {
+        "_id": "595263fc64d5db126736034a",
+        "code": "coo00umasir1",
+        "position": "position3",
+        "description": "descrption1",
+        "category": "591a20a1e2f1de129aea0e0d",
+        "exprience": 111,
+        "qualifications": "qualification1",
+        "status": "status1",
+        "due_date": "duedate",
+        "salary": "salary1",
+        "number_required": "12",
+        "contact": "0930015100",
+        "mobile": "mobile1",
+        "email": "email",
+        "level": "level1"
+    },
+    {
+        "_id": "59536291352eae2e7bbb7aac",
+        "code": "coo00umasir1",
+        "position": "position3",
+        "description": "descrption1",
+        "category": "591a20a1e2f1de129aea0e0d",
+        "exprience": 111,
+        "qualifications": "qualification1",
+        "status": "status1",
+        "due_date": "duedate",
+        "salary": "salary1",
+        "number_required": "12",
+        "contact": "0930015100",
+        "mobile": "mobile1",
+        "email": "email",
+        "level": "level1"
+    }
+]
+*/
 router.get('/searchByCategory',vacancy.searchByCategory)
 router.param('id', vacancy.validate)
 /**
