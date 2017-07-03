@@ -220,7 +220,7 @@ router.get('/paginate',vacancy.getVacancysByPagination)
 ]
 */
 router.get('/search',vacancy.search)
-
+router.get('/searchByCategory',vacancy.searchByCategory)
 router.param('id', vacancy.validate)
 /**
  * @apiDescription This endpoint is allow to Get Specfic Vacancy Collection.

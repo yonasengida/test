@@ -233,14 +233,45 @@ exports.search = function search(req, res, next) {
           });
           return;
       }
-var mongoose = require('mongoose');
-var _id = mongoose.Types.ObjectId('594fcd658996f20004350d2e');
+//var mongoose = require('mongoose');
+//var _id = mongoose.Types.ObjectId('594fcd658996f20004350d2e');
   VacancyDal.getCollection({
         $and: [
        { $or: [{ exprience: { $lte: exprienceTo } }, { exprience: true }] },
        { $or: [{ exprience: { $gt: exprienceFrom } }, { exprience: true }] },
        { $or: [{ category: true }, { category: category }] },
        { $or: [{ level: true }, { level: level }] },
+   
+    ]
+  },{}, function (err, doc) {
+    if (err) {
+      return next(err);
+    }3
+    res.json(doc);
+    });
+
+};
+exports.searchByCategory = function search(req, res, next) {
+  debug("Search");
+  
+     
+      var category = req.query.category;
+     
+       if(!category){
+          res.status(400);
+          res.json({
+              error:true,
+              msg:"Query Parameter is required",
+              status:400
+          });
+          return;
+      }
+  VacancyDal.getCollection({
+        $and: [
+      // { $or: [{ exprience: { $lte: exprienceTo } }, { exprience: true }] },
+      // { $or: [{ exprience: { $gt: exprienceFrom } }, { exprience: true }] },
+       { $or: [{ category: true }, { category: category }] },
+       //{ $or: [{ level: true }, { level: level }] },
    
     ]
   },{}, function (err, doc) {

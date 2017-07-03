@@ -9,8 +9,6 @@ var router = express.Router();
 router.post('/', comment.createComment);
 
 router.get('/', comment.getComments);
-
-
 // Export Router
 module.exports = router;
 
