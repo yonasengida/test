@@ -132,6 +132,97 @@ console.log(body);
   });
   workflow.emit('validateInput');
 };
+
+/**
+ * Create Vacancy Manually
+ * @param {req} HTTP Request
+ * @param {res} HTTP Response
+ * @param {next} Middleware Dispatcher
+ * 
+ */
+exports.createVacancyAutoCodeGenerate = function createVacancyAutoCodeGenerate(req, res, next) {
+console.log('check Input')
+  var body = req.body;
+  var workflow = new event.EventEmitter();
+workflow.on('generateCode' , function genCode(){
+ // console.log('generate Code Called')
+function keyGenerate(keyLength) {
+    var i, key = "", characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    var charactersLength = characters.length;
+
+    for (i = 0; i < keyLength; i++) {
+        key += characters.substr(Math.floor((Math.random() * charactersLength) + 1), 1);
+    }
+
+    return key;
+}
+var code=keyGenerate(4);
+body.code=code;
+workflow.emit('checkCodeDuplication');
+});
+ workflow.on('checkCodeDuplication', function checkDuplication() {
+    debug('Check Duplication');
+    console.log('checkCodeDuplication')
+    VacancyDal.get({ code: body.code }, function checkDup(err, doc) {
+      if (err) {
+        return next(err);
+      }
+      if (doc._id) {
+         workflow.emit('generateCode');
+       
+        return;
+      } else {
+         
+        workflow.emit('validateInput');
+      }
+    });
+
+  });
+
+  workflow.on('validateInput', function validate() {
+    
+    debug('Valdiate Vacncy Input')
+    req.checkBody('code', 'Invalid Vacancy Code').notEmpty().withMessage('Code should not be Empty')
+    req.checkBody('position', 'Invalid Position').notEmpty().withMessage('Position should not be Empty')
+    req.checkBody('description', 'Invalid Description').notEmpty().withMessage('Description should not be Empty')
+    req.checkBody('category', 'Invalid Job Category').notEmpty().withMessage('Job Category should not be Empty')
+    req.checkBody('exprience', 'Invalid  Exprience').notEmpty().withMessage('Exprience should not be Empty')
+    req.checkBody('due_date', 'Invalid  Due Date').notEmpty().withMessage('Due Date should not be Empty')
+    req.checkBody('level', 'Invalid Level').notEmpty().withMessage('Level should not be Empty')
+
+    if (req.validationErrors()) {
+      res.status(400);
+      res.json({
+        error: true,
+        msg: req.validationErrors(),
+        status: 400
+      });
+      return;
+    }
+
+  workflow.emit('createVacancy');
+  });
+
+  
+ 
+  workflow.on('createVacancy', function createVacancy() {
+     console.log('Create Vacancy')
+    debug('Create Vacancy');
+
+    VacancyDal.create(body, function createVacancy(err, doc) {
+    
+      if (err) {
+        return next(err);
+      }
+      res.status(201);
+      res.json(doc);
+
+
+    });
+  });
+  workflow.emit('generateCode');
+};
 /**
  * Get Vacancy
  * @param {req} HTTP Request

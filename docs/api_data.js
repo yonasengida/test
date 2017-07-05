@@ -396,17 +396,6 @@ define({ "api": [
     "groupTitle": "Profile"
   },
   {
-    "description": "<p>This is the Endpoint to acess all staffs inforamtion</p>",
-    "type": "get",
-    "url": "/staff",
-    "title": "Request All  Staff information",
-    "name": "GetStaff",
-    "group": "Staff",
-    "version": "0.0.0",
-    "filename": "routes/staff.js",
-    "groupTitle": "Staff"
-  },
-  {
     "description": "<p>This is the Endpoint to acess specific staff inforamtion</p>",
     "type": "get",
     "url": "/staff/:id",
@@ -426,6 +415,17 @@ define({ "api": [
         ]
       }
     },
+    "version": "0.0.0",
+    "filename": "routes/staff.js",
+    "groupTitle": "Staff"
+  },
+  {
+    "description": "<p>This is the Endpoint to acess all staffs inforamtion</p>",
+    "type": "get",
+    "url": "/staff",
+    "title": "Request All  Staff information",
+    "name": "GetStaff",
+    "group": "Staff",
     "version": "0.0.0",
     "filename": "routes/staff.js",
     "groupTitle": "Staff"
@@ -916,13 +916,6 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "code",
-            "description": "<p>Vacancy Code</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
             "field": "position",
             "description": "<p>Positions for vacancy</p>"
           },
@@ -1194,6 +1187,123 @@ define({ "api": [
     "groupTitle": "Vacancy"
   },
   {
+    "description": "<p>This Endpoint is allow to Import Vacancy</p>",
+    "type": "post",
+    "url": "/vacancies",
+    "title": "Import Vacancy",
+    "name": "ImportVacancy",
+    "group": "Vacancy",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "code",
+            "description": "<p>Vacancy Code</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "position",
+            "description": "<p>Positions for vacancy</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>Vacancy Description</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "category",
+            "description": "<p>Vacancy Job Category</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "exprience",
+            "description": "<p>Exprience</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "qualification",
+            "description": "<p>Qualification</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "due_date",
+            "description": "<p>Vacancy Due Date</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "salary",
+            "description": "<p>Users Country</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "number_required",
+            "description": "<p>Number_required for Position</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "contact",
+            "description": "<p>Contact</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "mobile",
+            "description": "<p>Mobile</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "lebel",
+            "description": "<p>Level Like Diploma,Degree or Msc.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Exmaple",
+          "content": "  {\n        \"code\":      \"code112232\",\n        \"position\":     \"position1\",\n        \"description\": \"descrption1\",\n        \"category\": \"jobcategory1\",\n        \"exprience\":   \"1\",\n        \"qualifications\":\"qualification1\",\n        \"due_date\":  \"duedate\",\n        \"salary\":        \"salary1\",\n        \"number_required\":\"12\",\n        \"contact\":       \"0930015100\",\n        \"mobile\":     \"mobile1\",\n        \"email\":       \"email\",\n        \"level\":        \"level1\"\n\t\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n {\n       \"_id\": \"58e1327663fed368a02a7f49\",\n       \"code\": \"code112232\",\n       \"position\": \"position1\",\n       \"description\": \"descrption1\",\n       \"exprience\": \"exprience1\",\n       \"qualifications\": \"qualification1\",\n       \"status\": \"status1\",\n       \"due_date\": \"duedate\",\n       \"salary\": \"salary1\",\n       \"number_required\": \"12\",\n       \"contact\": \"0930015100\",\n       \"mobile\": \"mobile1\",\n       \"email\": \"email\",\n       \"level\": \"level1\",\n       \"job_category\": []\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/vacancy.js",
+    "groupTitle": "Vacancy"
+  },
+  {
     "description": "<p>This Endpoint is allow to Search Vacancies with Different Parameters</p>",
     "type": "get",
     "url": "/vacancies/search?category=<parameter>&from=<parameter>&to=<parameter>&level=<parameter>",
@@ -1230,6 +1340,39 @@ define({ "api": [
             "optional": false,
             "field": "level",
             "description": "<p>Vacancy Level</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n [\n    {\n        \"_id\": \"5953628d352eae2e7bbb7aab\",\n        \"code\": \"coo00umasir1\",\n        \"position\": \"position3\",\n        \"description\": \"descrption1\",\n        \"category\": \"591a20a1e2f1de129aea0e0d\",\n        \"exprience\": 111,\n        \"qualifications\": \"qualification1\",\n        \"status\": \"status1\",\n        \"due_date\": \"duedate\",\n        \"salary\": \"salary1\",\n        \"number_required\": \"12\",\n        \"contact\": \"0930015100\",\n        \"mobile\": \"mobile1\",\n        \"email\": \"email\",\n        \"level\": \"level1\"\n    },\n    {\n        \"_id\": \"595263fc64d5db126736034a\",\n        \"code\": \"coo00umasir1\",\n        \"position\": \"position3\",\n        \"description\": \"descrption1\",\n        \"category\": \"591a20a1e2f1de129aea0e0d\",\n        \"exprience\": 111,\n        \"qualifications\": \"qualification1\",\n        \"status\": \"status1\",\n        \"due_date\": \"duedate\",\n        \"salary\": \"salary1\",\n        \"number_required\": \"12\",\n        \"contact\": \"0930015100\",\n        \"mobile\": \"mobile1\",\n        \"email\": \"email\",\n        \"level\": \"level1\"\n    },\n    {\n        \"_id\": \"59536291352eae2e7bbb7aac\",\n        \"code\": \"coo00umasir1\",\n        \"position\": \"position3\",\n        \"description\": \"descrption1\",\n        \"category\": \"591a20a1e2f1de129aea0e0d\",\n        \"exprience\": 111,\n        \"qualifications\": \"qualification1\",\n        \"status\": \"status1\",\n        \"due_date\": \"duedate\",\n        \"salary\": \"salary1\",\n        \"number_required\": \"12\",\n        \"contact\": \"0930015100\",\n        \"mobile\": \"mobile1\",\n        \"email\": \"email\",\n        \"level\": \"level1\"\n    }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/vacancy.js",
+    "groupTitle": "Vacancy"
+  },
+  {
+    "description": "<p>This Endpoint is allow to Search Vacancies By Categroy</p>",
+    "type": "get",
+    "url": "/vacancies/searchByCategory?category=<parameter>",
+    "title": "Search Vacancies By Category",
+    "name": "Search_Vacancy_by_Catgeory",
+    "group": "Vacancy",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "category",
+            "description": "<p>Vacancy Category</p>"
           }
         ]
       }
