@@ -113,7 +113,7 @@ router.get('/', vacancy.getVacancies);
 
 /**
  * @apiDescription This Endpoint is allow to Import Vacancy
- * @api {post} /vacancies  Import Vacancy
+ * @api {post} /vacancies/import  Import Vacancy
  * @apiName ImportVacancy
  * @apiGroup Vacancy
  * @apiParam {String} code Vacancy Code
