@@ -1189,7 +1189,7 @@ define({ "api": [
   {
     "description": "<p>This Endpoint is allow to Import Vacancy</p>",
     "type": "post",
-    "url": "/vacancies",
+    "url": "/vacancies/import",
     "title": "Import Vacancy",
     "name": "ImportVacancy",
     "group": "Vacancy",
