@@ -7,6 +7,7 @@ var moment     = require('moment');
 var config     = require('../config');
 var UserDal    = require('../dal/user');
 var TokenDal   = require('../dal/token');
+var ProfileDal   = require('../dal/profile');
 
 //Login Controller
 exports.login = function login(req, res, next) {
@@ -98,10 +99,21 @@ exports.login = function login(req, res, next) {
             }
             user = user.toJSON();
             delete user.password;
-            res.json({
-                token: tokenValue,
-                user: user
+            ProfileDal.get({ user: user._id }, function getProfile(err, doc) {
+                if (err) {
+                    return next(err);
+                }
+                res.json({
+                    token: tokenValue,
+                    user: doc
+                });
             });
+
+            // res.json({
+            //     token: tokenValue,
+            //     user: user
+            // });
+
         });
     });
 

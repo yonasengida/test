@@ -14,7 +14,12 @@ var moment  = require('moment');
 var Profile        = require('../models/profile');
 
 var population = [{
-  path: 'profile'
+  path: 'user'
+},
+{
+  path: 'customer'
+},{
+  path: 'staff'
 }];
 
 /**

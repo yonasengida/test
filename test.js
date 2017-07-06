@@ -9,6 +9,9 @@ function keyGenerate(keyLength) {
 
     return key;
 }
-var code=keyGenerate(4);
+
+for(i =1;i<=1000;i++){
+var code=keyGenerate(9);
 
 console.log(code);
+}
