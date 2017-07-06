@@ -145,7 +145,7 @@ console.log('check Input')
   var body = req.body;
   var workflow = new event.EventEmitter();
 workflow.on('generateCode' , function genCode(){
- // console.log('generate Code Called')
+
 function keyGenerate(keyLength) {
     var i, key = "", characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
