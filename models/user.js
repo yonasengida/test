@@ -27,7 +27,7 @@ var UserSchema = new Schema({
   last_modified:  { type: Date }
 },{versionKey: false});
 
-//UserSchema.plugin(hidden);
+UserSchema.plugin(hidden);
 UserSchema.plugin(paginate);
 
 // Add a pre save hook
