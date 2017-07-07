@@ -81,6 +81,8 @@ exports.createConfrimationkey = function createConfrimationkey(req, res, next) {
 
         body.key = keyGenerate(9);
         workflow.emit('checkCodeDuplication');
+
+       
     });
     workflow.on('checkCodeDuplication', function checkDuplication() {
         debug('Check Duplication');
@@ -102,7 +104,7 @@ exports.createConfrimationkey = function createConfrimationkey(req, res, next) {
     });
     workflow.on('validateInput', function validate() {
         debug('validate Confrimationkey Input');
-        console.log(body.key);
+      //  console.log(body.key);
         req.checkBody('key', 'Key  should not be empty!')
             .notEmpty();
         req.checkBody('level', 'Level  should not be empty!')
@@ -137,8 +139,9 @@ exports.createConfrimationkey = function createConfrimationkey(req, res, next) {
 
     });
 
-
+// for(var i=1;i<=100;i++){
     workflow.emit('generateCode');
+    // }
 };
 /**
  * Get Confrimationkey

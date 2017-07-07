@@ -1,3 +1,4 @@
+var KeyDal = require('./dal/confrimationkey');
 function keyGenerate(keyLength) {
     var i, key = "", characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -10,8 +11,7 @@ function keyGenerate(keyLength) {
     return key;
 }
 
-for(i =1;i<=1000;i++){
+for( var i =1;i<=1000;i++){
 var code=keyGenerate(9);
 
-console.log(code);
 }
