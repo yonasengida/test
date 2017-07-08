@@ -97,15 +97,20 @@ exports.login = function login(req, res, next) {
             if (err) {
                 return next(err);
             }
+        //    req._user=user;
+          req._user1 = user.profile.user;
                ProfileDal.get({ user: user._id }, function getProfile(err, doc) {
                 if (err) {
                     return next(err);
                 }
-                //console.log(doc)
+                 
+              //  console.log( req._user)
                 res.json({
                     token: tokenValue,
                     user: doc
                 });
+               
+                console.log(req._user1);
             });
 
 
@@ -119,8 +124,35 @@ exports.login = function login(req, res, next) {
 
 //Logout Controller
 exports.logout = function logout(req, res, next) {
-
-//TokenDal.update({_id.})
+   // console.log(req._user1);
+    // TokenDal.update({ user: token._id }, {revoked: true }, function updateToken(err, token) {
+    //     if (err) {
+    //         return next(err);
+    //     }
+    //     res.json({
+    //         msg:"Sucess Fully Logout"
+    //     });
+    // });
+    // fetch the user id from req object, which is appended on the authenticate middleware
+    var userId = req._user1;
+    console.log(userId)
+    if (!userId) {
+        // respond error to the request
+        res.status(401);    // Unauthorized
+        res.json({
+            message: 'You need to be logged in to logout!, Use a correct token'
+        });
+        return;
+    }
+    // Revoke the token value of the user
+    TokenDal.update({ user: userId }, { $set: { revoked: true } }, function updateCallback(err, token) {
+        if (err) return next(err);
+        // respond to the user
+        res.status(200);    // Ok
+        res.json({
+            message: 'User Successfuly logged out!'
+        })
+    });
 
 };
 

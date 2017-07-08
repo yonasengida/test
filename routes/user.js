@@ -117,7 +117,7 @@ router.post('/signup', user.createUser);
 router.post('/passchange', user.passwordChange);
 
 // POST /users/logout
-router.post('/logout', user.noop);
+router.post('/logout', auth.logout);
 /**
  * @apiDescription This Endpoint is allow to Get All Users Information.
  * @api {get} /users Request Users information
