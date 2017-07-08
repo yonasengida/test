@@ -32,7 +32,7 @@ var app = express();
 app.use(express.static('docs'))
 
 // //Authentication Middleware
-app.use(authenticate({set_auth:true}).unless({
+app.use(authenticate({set_auth:false}).unless({
   path: ['/users/login', '/users/signup','/vacancies/open','/comments','/news','/key']
 }));
 
@@ -84,29 +84,5 @@ app.listen(config.HTTP_PORT, function connectionListener() {
   console.log("App is running");
   debug('EAGLES API running on port %s', config.HTTP_PORT);
 });
-// var KeyDal = require('./dal/confrimationkey');
-// function keyGenerate(keyLength) {
-//     var i, key = "", characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-//     var charactersLength = characters.length;
-
-//     for (i = 0; i < keyLength; i++) {
-//         key += characters.substr(Math.floor((Math.random() * charactersLength) + 1), 1);
-//     }
-
-//     return key;
-// }
-
-// for( var i =1;i<=10;i++){
-// var code=keyGenerate(2);
-
-// //console.log(code);
-// KeyDal.get({key:code},function getAll(err, doc){
-//   if(!doc._id){
-// console.log(code);
-//   }
-
-// });
-
-// }
 module.exports = app;
