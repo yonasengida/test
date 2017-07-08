@@ -176,7 +176,7 @@ exports.addJobCategory = function addJobCategory(req, res, next){
   var workflow = new event.EventEmitter();
 
 workflow.on('inputValidation', function inputValidation(){
-req.checkBody('job_category','invalid job category').notEmpty().isMongoId('job_category').withMessage('Wrong ID is passed');;
+req.checkBody('job_category','invalid job category').notEmpty().withMessage('Wrong ID is passed');;
 req.checkBody('customerId','invalid Cutomer Id').notEmpty().isMongoId('customerId').withMessage('Wrong ID is passed');;
 if(req.validationErrors()){
   res.status(400);

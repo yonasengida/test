@@ -32,7 +32,7 @@ var app = express();
 app.use(express.static('docs'))
 
 // //Authentication Middleware
-app.use(authenticate({set_auth:true}).unless({
+app.use(authenticate({set_auth:false}).unless({
   path: ['/users/login', '/users/signup','/vacancies/open','/comments','/news','/key']
 }));
 
