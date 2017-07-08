@@ -97,23 +97,17 @@ exports.login = function login(req, res, next) {
             if (err) {
                 return next(err);
             }
-           // user = user.toJSON();
-           // delete user.password;
-            ProfileDal.get({ user: user._id }, function getProfile(err, doc) {
+               ProfileDal.get({ user: user._id }, function getProfile(err, doc) {
                 if (err) {
                     return next(err);
                 }
-                console.log(doc)
+                //console.log(doc)
                 res.json({
                     token: tokenValue,
                     user: doc
                 });
             });
 
-            // res.json({
-            //     token: tokenValue,
-            //     user: user
-            // });
 
         });
     });

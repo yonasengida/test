@@ -195,58 +195,22 @@ exports.getConfrimationkeysByPagination = function getConfrimationkeysByPaginati
     });
 };
 
+exports.generateKey = function generateKey(req, res, next) {
+    function keyGenerate(keyLength) {
+        var i, key = "", characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-exports.addJobCategory = function addJobCategory(req, res, next) {
-    debug('Add Jobcategory');
-    var body = req.body;
-    var workflow = new event.EventEmitter();
+        var charactersLength = characters.length;
 
-    workflow.on('inputValidation', function inputValidation() {
-        req.checkBody('job_category', 'invalid job category').notEmpty().isMongoId('job_category').withMessage('Wrong ID is passed');;
-        req.checkBody('ConfrimationkeyId', 'invalid Cutomer Id').notEmpty().isMongoId('ConfrimationkeyId').withMessage('Wrong ID is passed');;
-        if (req.validationErrors()) {
-            res.status(400);
-            res.json({
-                error: true,
-                msg: req.validationErrors(),
-                status: 400
-            });
-            return;
+        for (i = 0; i < keyLength; i++) {
+            key += characters.substr(Math.floor((Math.random() * charactersLength) + 1), 1);
         }
-        workflow.emit('checkDuplication');
-    });
 
-    workflow.on('checkDuplication', function checkDuplication() {
-        debug('Check Duplication')
-        ConfrimationkeyDal.get({ _id: body.ConfrimationkeyId, job_category: { $in: [body.job_category] } }, function getConfrimationkeyJobCategory(err, doc) {
-            if (err) {
-                return next(err);
-            }
-            if (doc._id) {
-                res.status(409);
-                res.json({
-                    error: true,
-                    msg: "Already Exists",
-                    status: 409
+        return key;
+    }
+    for (var i = 1; i < 10; i++) {
+        var code = keyGenerate(9);
+       
+       console.log(code);
+    }
 
-                });
-                return;
-            } else {
-                workflow.emit('addCategory');
-            }
-        });
-    });
-    workflow.on('addCategory', function addCategory() {
-        debug('Add Job Category')
-        console.log(body.ConfrimationkeyId + body.job_category);
-        ConfrimationkeyDal.update({ _id: body.ConfrimationkeyId }, { $push: { job_category: body.job_category } }, function addJobCategory(err, doc) {
-            if (err) {
-                return nect(err);
-            }
-            res.status(201);
-            res.json(doc);
-        });
-    });
-
-    workflow.emit('inputValidation');
 };

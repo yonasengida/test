@@ -14,4 +14,9 @@ function keyGenerate(keyLength) {
 for( var i =1;i<=1000;i++){
 var code=keyGenerate(9);
 
+//console.log(code);
+KeyDal.getCollection({},function getAll(err, doc){
+console.log(doc);
+});
+
 }
