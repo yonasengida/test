@@ -241,6 +241,30 @@ exports.getConfrimationkeys = function getConfrimationkeys(req, res, next) {
         res.json(docs);
     });
 };
+exports.getConfrimationkeyslevel1 = function getConfrimationkeys(req, res, next) {
+    Level1ConfrimationkeyDalConfrimationkeyDal.getCollection({}, function getAllConfrimationkeys(err, docs) {
+        if (err) {
+            return next(err);
+        }
+        res.json(docs);
+    });
+};
+exports.getConfrimationkeyslevel2 = function getConfrimationkeys(req, res, next) {
+    Level2ConfrimationkeyDalConfrimationkeyDal.getCollection({}, function getAllConfrimationkeys(err, docs) {
+        if (err) {
+            return next(err);
+        }
+        res.json(docs);
+    });
+};
+exports.getConfrimationkeyslevel3 = function getConfrimationkeys(req, res, next) {
+    Level3ConfrimationkeyDalConfrimationkeyDal.getCollection({}, function getAllConfrimationkeys(err, docs) {
+        if (err) {
+            return next(err);
+        }
+        res.json(docs);
+    });
+};
 
 /**
  * Get Confrimationkeys by pagination
