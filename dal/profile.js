@@ -181,3 +181,16 @@ exports.getCollectionBYPagination = function getCollectionBYPagination(query,que
     return cb(null, result);
   });
 };
+
+exports.report = function report(query, cb) {
+  debug("Generating Club Report");
+  Club.aggregate(
+
+    query, function generateReport(err, report) {
+      if (err) {
+        return cb(err);
+      }
+      return cb(null, report);
+
+    });
+};

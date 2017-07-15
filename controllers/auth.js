@@ -97,8 +97,7 @@ exports.login = function login(req, res, next) {
             if (err) {
                 return next(err);
             }
-        //    req._user=user;
-          req._user1 = user.profile.user;
+               req._user1 = user.profile.user;
                ProfileDal.get({ user: user._id }, function getProfile(err, doc) {
                 if (err) {
                     return next(err);
@@ -108,9 +107,10 @@ exports.login = function login(req, res, next) {
                 res.json({
                     token: tokenValue,
                     user: doc
+
                 });
-               
-                console.log(req._user1);
+            //console.log(sizeof(doc.customer.job_category));
+               // console.log(.customerreq._user1);
             });
 
 

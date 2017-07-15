@@ -15,13 +15,14 @@ const config    = require('../config');
 var Schema = mongoose.Schema;
 
 //New Comment Schema Instance
-var ConfrimationkeySchema = new Schema({
+var Level1ConfrimationkeySchema = new Schema({
 key:       {type:String},
 due_date:  {type:Date},
 status:    {type:String},
-created_at:{type: Date}
+created_at:{type: Date},
+updated_at:{type: Date}
 },{versionKey: false});
 // add middleware to support pagination
-ConfrimationkeySchema.plugin(paginator);
+Level1ConfrimationkeySchema.plugin(paginator);
 // Expose the User Model
-module.exports = mongoose.model('Confrimationkey', ConfrimationkeySchema);
+module.exports = mongoose.model('Level1Confrimationkey', Level1ConfrimationkeySchema);

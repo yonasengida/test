@@ -1,7 +1,12 @@
 // Load Module Dependencies
 var event = require('events');
-var debug = require('debug')('eagles-api:Controllers');;
-var ConfrimationkeyDal = require('../dal/confrimationkey');
+var debug = require('debug')('eagles-api:Controllers');
+var moment = require('moment');
+
+var Level1ConfrimationkeyDal = require('../dal/level1confrimationkey');
+var Level2ConfrimationkeyDal = require('../dal/level2confrimationkey');
+var Level3ConfrimationkeyDal = require('../dal/level3confrimationkey');
+
 
 /**
  * NOOP
@@ -62,9 +67,40 @@ exports.validate = function validate(req, res, next) {
  * 
  */
 exports.createConfrimationkey = function createConfrimationkey(req, res, next) {
+    var now = moment().toISOString();
     var body = req.body;
     var workflow = new event.EventEmitter();
+    body.status="inactive";
+    body.updated_at=now;
+    body.created_at=now;
+    body.due_date = moment().add(2, 'months').toISOString();
+ 
+    /**
+     * Validate Input
+     */
+    workflow.on('validateInput', function validate() {
+        debug('validate Confrimationkey Input');
 
+        // req.checkBody('key', 'Key  should not be empty!')
+        //     .notEmpty();
+        req.checkBody('level', 'Level  should not be empty!')
+            .notEmpty().isIn(['level1', 'level2','level3']).withMessage('Level Should be level1 , level2 or level3');
+        req.checkBody('due_date', 'Due Date  should not be empty!')
+            .notEmpty();
+        var validationErrors = req.validationErrors();
+
+        if (validationErrors) {
+            res.status(400);
+            res.json(validationErrors);
+        }
+        else {
+            workflow.emit('generateCode');
+        }
+
+    });
+    /**
+     * Genrate Code
+     */
     workflow.on('generateCode', function genCode() {
 
         function keyGenerate(keyLength) {
@@ -86,62 +122,99 @@ exports.createConfrimationkey = function createConfrimationkey(req, res, next) {
     });
     workflow.on('checkCodeDuplication', function checkDuplication() {
         debug('Check Duplication');
-        //  console.log('checkCodeDuplication')
-        ConfrimationkeyDal.get({ key: body.key }, function checkDup(err, doc) {
-            if (err) {
-                return next(err);
-            }
-            if (doc._id) {
-                workflow.emit('generateCode');
+        var check_level=body.level;
+        if (check_level === "level1") {
+            Level1ConfrimationkeyDal.get({ key: body.key }, function checkDup(err, doc) {
+                if (err) {
+                    return next(err);
+                }
+                if (doc._id) {
+                    workflow.emit('generateCode');
 
-                return;
-            } else {
+                    return;
+                } else {
 
-                workflow.emit('validateInput');
-            }
-        });
-
-    });
-    workflow.on('validateInput', function validate() {
-        debug('validate Confrimationkey Input');
-      //  console.log(body.key);
-        req.checkBody('key', 'Key  should not be empty!')
-            .notEmpty();
-        req.checkBody('level', 'Level  should not be empty!')
-            .notEmpty();
-        req.checkBody('due_date', 'Due Date  should not be empty!')
-            .notEmpty();
-        var validationErrors = req.validationErrors();
-
-        if (validationErrors) {
-            res.status(400);
-            res.json(validationErrors);
+                    workflow.emit('createConfrimationkey');
+                }
+            });
         }
-        else {
-            workflow.emit('checkDuplication');
+        else if(check_level === "level2"){
+           Level2ConfrimationkeyDal.get({ key: body.key }, function checkDup(err, doc) {
+                if (err) {
+                    return next(err);
+                }
+                if (doc._id) {
+                    workflow.emit('generateCode');
+
+                    return;
+                } else {
+
+                    workflow.emit('createConfrimationkey');
+                }
+            });  
+        } else if(check_level === "level3"){
+           Level3ConfrimationkeyDal.get({ key: body.key }, function checkDup(err, doc) {
+                if (err) {
+                    return next(err);
+                }
+                if (doc._id) {
+                    workflow.emit('generateCode');
+
+                    return;
+                } else {
+
+                    workflow.emit('createConfrimationkey');
+                }
+            });  
         }
-
+    
     });
-
-    workflow.on('checkDuplication', function checkDuplication() {
-
-        workflow.emit('createConfrimationkey');
-    });
-
+  
     workflow.on('createConfrimationkey', function createConfrimationkey() {
-        ConfrimationkeyDal.create(body, function createConfrimationkey(err, doc) {
-            if (err) {
-                return next(err);
-            }
-            res.status(201);
-            res.json(doc);
-        });
+      console.log("Create confriamtion key")
+      console.log(body.level)
+        if(body.level === "level1") {
+             console.log("Create confriamtion key level 1")
+            Level1ConfrimationkeyDal.create(body, function createConfrimationkey(err, doc) {
+                if (err) {
+                    return next(err);
+                }
+                res.status(201);
+                res.json(doc);
+            });
+        }
+        else if (body.level === "level2") {
+             console.log("Create confriamtion key level 2")
+            Level2ConfrimationkeyDal.create(body, function createConfrimationkey(err, doc) {
+                if (err) {
+                    return next(err);
+                }
+                res.status(201);
+                res.json(doc);
+            });
+        }
+        else if (body.level === "level3") {
+             console.log("Create confriamtion key level 3")
+            Level3ConfrimationkeyDal.create(body, function createConfrimationkey(err, doc) {
+                if (err) {
+                    return next(err);
+                }
+                res.status(201);
+                res.json(doc);
+            });
+        }
+        else{
+            res.json({
+                error:true,
+                msg:"Error is happen"
+            })
+        }
+       
 
     });
 
-// for(var i=1;i<=100;i++){
-    workflow.emit('generateCode');
-    // }
+    workflow.emit('validateInput');
+    
 };
 /**
  * Get Confrimationkey
@@ -212,5 +285,28 @@ exports.generateKey = function generateKey(req, res, next) {
        
        console.log(code);
     }
+
+};
+/**
+ * This Interface is used to Sell Cards internally or from back office
+ * 
+ * Steps
+ * 1. Check Card status with corresponding Level
+ * 2.if Satus is acive u can sell
+ */
+exports.sellKey = function sellKey(req, res, next){
+
+    var body = req.body;
+    var workflow = new event.EventEmitter();
+    var customerID = body.customer;
+    var key        = body.key;
+
+};
+
+/**
+ * This interface to activate cards only for mobile users
+ */
+
+exports.activateKey = function activateKey(req, res, next){
 
 };

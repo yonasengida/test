@@ -6,7 +6,7 @@ var key = require('../controllers/confrimationkey');
 // Create a Router
 var router = express.Router();
 
-router.post('/', key.generateKey);
+router.post('/', key.createConfrimationkey);
 
 router.get('/', key.getConfrimationkeys);
 

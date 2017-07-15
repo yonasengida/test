@@ -8,6 +8,11 @@ var search      = require('express-partial-response');
 var config      = require('./config');
 var router      = require('./routes');
 var authenticate = require('./lib/authenticate');
+
+
+//lets require/import the mongodb native drivers.
+var mongodb = require('mongodb');
+
 //var authorize = require('./lib/authorize');
 
 // Connect to Mongodb
@@ -32,7 +37,7 @@ var app = express();
 app.use(express.static('docs'))
 
 // //Authentication Middleware
-app.use(authenticate({set_auth:true}).unless({
+app.use(authenticate({set_auth:false}).unless({
   path: ['/users/login', '/users/signup','/vacancies/open','/comments','/news','/key']
 }));
 
@@ -44,7 +49,6 @@ app.use(search());
 
 // Set Validator
 app.use(validator());
-
 //CORS -enable cross-origin resource sharing
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");

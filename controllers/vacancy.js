@@ -315,6 +315,12 @@ exports.search = function search(req, res, next) {
       var exprienceTo = req.query.to;
       var category = req.query.category;
       var level = req.query.level;
+     var start_date = moment(req.query.start_date).toISOString();
+     var end_date = moment(req.query.start_date).toISOString();
+   //   console.log(moment(req.query.start_date).toISOString());
+      // var start_date = req.query.start_date;
+      // var end_date = req.query.end_date;
+      // if(!exprienceFrom ||!exprienceTo||!category||!level||!start_date||!end_date){
        if(!exprienceFrom ||!exprienceTo||!category||!level){
           res.status(400);
           res.json({
@@ -324,11 +330,11 @@ exports.search = function search(req, res, next) {
           });
           return;
       }
-//var mongoose = require('mongoose');
-//var _id = mongoose.Types.ObjectId('594fcd658996f20004350d2e');
+  
   VacancyDal.getCollection({
         $and: [
        { $or: [{ exprience: { $lte: exprienceTo } }, { exprience: true }] },
+    //   { $or: [{ due_date: { $gte:new Date('2013-12-12T16:00:00.000Z')} }, { due_date: true }] },
        { $or: [{ exprience: { $gt: exprienceFrom } }, { exprience: true }] },
        { $or: [{ category: true }, { category: category }] },
        { $or: [{ level: true }, { level: level }] },
@@ -337,7 +343,7 @@ exports.search = function search(req, res, next) {
   },{}, function (err, doc) {
     if (err) {
       return next(err);
-    }3
+    }
     res.json(doc);
     });
 
