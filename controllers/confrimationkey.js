@@ -242,7 +242,7 @@ exports.getConfrimationkeys = function getConfrimationkeys(req, res, next) {
     });
 };
 exports.getConfrimationkeyslevel1 = function getConfrimationkeys(req, res, next) {
-    Level1ConfrimationkeyDalConfrimationkeyDal.getCollection({}, function getAllConfrimationkeys(err, docs) {
+    Level1ConfrimationkeyDal.getCollection({}, function getAllConfrimationkeys(err, docs) {
         if (err) {
             return next(err);
         }
@@ -250,7 +250,7 @@ exports.getConfrimationkeyslevel1 = function getConfrimationkeys(req, res, next)
     });
 };
 exports.getConfrimationkeyslevel2 = function getConfrimationkeys(req, res, next) {
-    Level2ConfrimationkeyDalConfrimationkeyDal.getCollection({}, function getAllConfrimationkeys(err, docs) {
+    Level2ConfrimationkeyDal.getCollection({}, function getAllConfrimationkeys(err, docs) {
         if (err) {
             return next(err);
         }
@@ -258,7 +258,7 @@ exports.getConfrimationkeyslevel2 = function getConfrimationkeys(req, res, next)
     });
 };
 exports.getConfrimationkeyslevel3 = function getConfrimationkeys(req, res, next) {
-    Level3ConfrimationkeyDalConfrimationkeyDal.getCollection({}, function getAllConfrimationkeys(err, docs) {
+    Level2ConfrimationkeyDal.getCollection({}, function getAllConfrimationkeys(err, docs) {
         if (err) {
             return next(err);
         }
