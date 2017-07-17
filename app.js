@@ -51,6 +51,7 @@ app.use(search());
 app.use(validator());
 //CORS -enable cross-origin resource sharing
 app.use(function (req, res, next) {
+  // res.config.COR
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();

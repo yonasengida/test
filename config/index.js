@@ -12,12 +12,16 @@ module.exports = {
   HTTP_PORT: HTTP_PORT,
 
   // MONGODB URL
-//MONGODB_URL: 'mongodb://localhost/eagles',
-MONGODB_URL: 'mongodb://eagle:eagle@ds133162.mlab.com:33162/eagle', 
+MONGODB_URL: 'mongodb://localhost/eagles',
+//MONGODB_URL: 'mongodb://eagle:eagle@ds133162.mlab.com:33162/eagle', 
   // SALT VALUE LENGTH
   SALT_LENGTH :7,
   
- TOKEN_LENGTH: 7
-
+ TOKEN_LENGTH: 7,
+ CORS_OPTS: {
+    origin: '*',
+    methods: 'GET,POST,PUT,DELETE,OPTIONS',
+    allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization'
+  },
 
 };

@@ -7,6 +7,8 @@ var Level1ConfrimationkeyDal = require('../dal/level1confrimationkey');
 var Level2ConfrimationkeyDal = require('../dal/level2confrimationkey');
 var Level3ConfrimationkeyDal = require('../dal/level3confrimationkey');
 
+var CustomerDal = require('../dal/customer');
+
 
 /**
  * NOOP
@@ -233,14 +235,7 @@ exports.getConfrimationkey = function getConfrimationkey(req, res, next) {
  * @param {next} Middleware Dispatcher
  * 
  */
-exports.getConfrimationkeys = function getConfrimationkeys(req, res, next) {
-    ConfrimationkeyDal.getCollection({}, function getAllConfrimationkeys(err, docs) {
-        if (err) {
-            return next(err);
-        }
-        res.json(docs);
-    });
-};
+
 exports.getConfrimationkeyslevel1 = function getConfrimationkeys(req, res, next) {
     Level1ConfrimationkeyDal.getCollection({}, function getAllConfrimationkeys(err, docs) {
         if (err) {
@@ -258,7 +253,7 @@ exports.getConfrimationkeyslevel2 = function getConfrimationkeys(req, res, next)
     });
 };
 exports.getConfrimationkeyslevel3 = function getConfrimationkeys(req, res, next) {
-    Level2ConfrimationkeyDal.getCollection({}, function getAllConfrimationkeys(err, docs) {
+    Level3ConfrimationkeyDal.getCollection({}, function getAllConfrimationkeys(err, docs) {
         if (err) {
             return next(err);
         }
@@ -315,16 +310,95 @@ exports.generateKey = function generateKey(req, res, next) {
  * This Interface is used to Sell Cards internally or from back office
  * 
  * Steps
- * 1. Check Card status with corresponding Level
+ * 1. Validate Input
+ * 2. Check Card status with corresponding Level
  * 2.if Satus is acive u can sell
  */
 exports.sellKey = function sellKey(req, res, next){
 
-    var body = req.body;
-    var workflow = new event.EventEmitter();
-    var customerID = body.customer;
-    var key        = body.key;
+    var body       = req.body;
+    var workflow   = new event.EventEmitter();
+    var customerID = body.customer_id;
+    var customerLevel = body.customer_level;
+    var inputKey        = body.key;
+    // Validate Input Here
+   workflow.on('validateInput', function validate() {
+        debug('validate  Input');
 
+        req.checkBody('key', 'Key  should not be empty!')
+        .notEmpty();
+        req.checkBody('customer_level', 'Customer Level  should not be empty!')
+            .notEmpty().isIn(['1', '2','3','4','5']).withMessage('Level Should be between 1 and 5');
+        req.checkBody('customer_id', 'Customer Id should not be empty!')
+            .notEmpty();
+        var validationErrors = req.validationErrors();
+
+        if (validationErrors) {
+            res.status(400);
+            res.json(validationErrors);
+        }
+        else {
+            workflow.emit('checkCardStatus');
+        }
+
+    });
+    workflow.on('checkCardStatus', function checkCardStatus(){
+        console.log('check Card status'+customerLevel)
+         if(customerLevel*1 === 1){
+            Level1ConfrimationkeyDal.get({key:inputKey,status:'inactive'}, function checkKey(err,doc){
+                if(err){
+                    return next(err);
+                }
+                console.log(doc);
+                if(!doc._id){
+                res.json({error:true,msg:"sorry the key is not found or Sold before", status:404});
+                return;
+                }
+                // res.json({msg:"ok level 1"});
+                CustomerDal.update({_id:customerID},{$set:{key:inputKey}}, function updateCustomer(err,doc){
+                    if(err){
+                        return next(err);
+                        }
+                        Level1ConfrimationkeyDal.update({key:inputKey},{status:'active'}, function updateKey(err,doc){
+                            if(err){
+                                return next(err);
+                            }
+                            res.json({msg:"Sucess Fully SOLD",key:doc});
+                        });
+                    
+                });
+               
+            });
+        }else if(customerLevel === 2 || customerLevel === 3){
+        Level2ConfrimationkeyDal.get({key:inputKey},{status:'inactive'}, function checkKey(err,doc){
+                if(err){
+                    return next(err);
+                }
+            //  if()
+                res.json({msg:"ok level 3"});
+            });
+        }else if(customerLevel >=4){
+            Level3ConfrimationkeyDal.get({key:inputKey},{status:'inactive'}, function checkKey(err,doc){
+                if(err){
+                    return next(err);
+                }
+                res.json({msg:"ok Level3"});
+            });
+
+        }else{
+            res.json({error: true,msg:"Wrong Parameter",status:400})
+        }
+        workflow.emit('updateCustomer');
+        });
+        workflow.on('updateCustomer', function updateCustomer(){
+
+            workflow.emit('updateCardStatus');
+        });
+         workflow.on('responsed', function responsed(){
+
+          res.json({msg:"Successfully Sold"});
+        });
+    workflow.emit('validateInput');
 };
 
 /**

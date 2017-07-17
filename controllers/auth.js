@@ -106,11 +106,10 @@ exports.login = function login(req, res, next) {
               //  console.log( req._user)
                 res.json({
                     token: tokenValue,
-                    user: doc
-
+                    user: doc,
+                    level:doc.customer.job_category.length
                 });
-            //console.log(sizeof(doc.customer.job_category));
-               // console.log(.customerreq._user1);
+            
             });
 
 

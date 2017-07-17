@@ -23,7 +23,7 @@ exports.noop = function (req, res, next) {
  * @param {next} Middleware Dispatcher
  * 
  */
-exports.validate = function validate(req, res, next) {
+exports.validate = function validate(req, res, next,id) {
   //Validate the id is mongoid or not
   req.checkParams('id', 'Invalid urlparam').isMongoId(id);
 
@@ -42,7 +42,7 @@ exports.validate = function validate(req, res, next) {
   } else {
     CustomerDal.get({ _id: id }, function (err, doc) {
       if (doc._id) {
-        req.doc = doc._id;
+        req.doc = doc;
         next();
       } else {
         res.status(404)
@@ -111,7 +111,12 @@ exports.createCustomer = function createCustomer(req, res, next) {
  * 
  */
 exports.getCustomer = function getCustomer(req, res, next) {
-  res.json(req.doc);
+  res.json({
+                   
+                    customer: req.doc,
+                    level:req.doc.job_category.length
+                });
+              
 };
 /**
  * Get Customers
