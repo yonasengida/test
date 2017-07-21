@@ -22,6 +22,7 @@ job_category:[{type:String}],
 profile:         { type: Schema.Types.ObjectId, ref: 'Profile'},
 exprience:       {type :Number},
 key:             {type:String},
+status:             {type:String},
 expire_date:     { type:Date}
 },{versionKey: false},{
     timestamps: {createdAt: 'created_at', updatedAt: 'updated_at'}

@@ -38,7 +38,7 @@ app.use(express.static('docs'))
 
 // //Authentication Middleware
 app.use(authenticate({set_auth:false}).unless({
-  path: ['/users/login', '/users/signup','/vacancies/open','/comments','/news','/key']
+  path: ['/users/login', '/users/signup','/vacancies/open','/comments','/news','/key/activate','customers/category']
 }));
 
 // Set Middleware
@@ -54,6 +54,7 @@ app.use(function (req, res, next) {
   // res.config.COR
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   next();
 });
 

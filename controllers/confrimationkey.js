@@ -355,11 +355,11 @@ exports.sellKey = function sellKey(req, res, next){
                 return;
                 }
                 // res.json({msg:"ok level 1"});
-                CustomerDal.update({_id:customerID},{$set:{key:inputKey}}, function updateCustomer(err,doc){
+                CustomerDal.update({_id:customerID},{$set:{key:inputKey,status:'active'}}, function updateCustomer(err,doc){
                     if(err){
                         return next(err);
                         }
-                        Level1ConfrimationkeyDal.update({key:inputKey},{status:'active'}, function updateKey(err,doc){
+                        Level1ConfrimationkeyDal.update({key:inputKey},{status:'used'}, function updateKey(err,doc){
                             if(err){
                                 return next(err);
                             }
@@ -406,5 +406,6 @@ exports.sellKey = function sellKey(req, res, next){
  */
 
 exports.activateKey = function activateKey(req, res, next){
+// here is to active 
 
 };
