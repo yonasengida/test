@@ -14,7 +14,7 @@ router.post('/sell', key.sellKey);
  * @apiName ActivateKey
  * @apiGroup Key
  * 
- * @apiParam {String} keyActivation Key
+ * @apiParam {String} key  Activation Key
  * @apiParam {String} customer_id CustomerID
  * @apiParam {String} customer_level Counts of Job Category for each customer
 * @apiParamExample Request Exmaple
