@@ -18,10 +18,10 @@ module.exports = function initRouter(app) {
 
   // Users Endpoint
   app.use('/users', userRouter);
- 
+
   // Jobcategory Endpoint
    app.use('/jobcategories', jobcategoryRouter);
-    
+
   // Customers Endpoint
    app.use('/customers', customerRouter);
 

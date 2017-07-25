@@ -310,6 +310,51 @@
     "groupTitle": "JobCategory"
   },
   {
+    "description": "<p>This endpoint is allow to ActivateKey</p>",
+    "type": "post",
+    "url": "/key/activate",
+    "title": "ActivateKey",
+    "name": "ActivateKey",
+    "group": "Key",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "keyActivation",
+            "description": "<p>Key</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "customer_id",
+            "description": "<p>CustomerID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "customer_level",
+            "description": "<p>Counts of Job Category for each customer</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request Exmaple",
+          "content": "\n{\n    \"key\":\"FQRurUdDP\",\n    \"customer_level\":\"1\",\n    \"customer_id\":\"59469f406bc988251d5f1691\"\n \n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/key.js",
+    "groupTitle": "Key"
+  },
+  {
     "description": "<p>This Endpointis to acess all profile of staff or customer</p>",
     "type": "get",
     "url": "/profiles/:id",

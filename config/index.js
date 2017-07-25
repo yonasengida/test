@@ -10,10 +10,9 @@ var HTTP_PORT  = process.env.PORT || 5000;
 module.exports = {
   // HTTP PORT
   HTTP_PORT: HTTP_PORT,
-
   // MONGODB URL
-//MONGODB_URL: 'mongodb://localhost/eagles',
-MONGODB_URL: 'mongodb://eagle:eagle@ds133162.mlab.com:33162/eagle', 
+MONGODB_URL: 'mongodb://localhost/eagles',
+//MONGODB_URL: 'mongodb://eagle:eagle@ds133162.mlab.com:33162/eagle', 
   // SALT VALUE LENGTH
   SALT_LENGTH :7,
   
