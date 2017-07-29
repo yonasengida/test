@@ -7,7 +7,7 @@ var ProfileDal = require('../dal/profile');
 // Interface for not implemented
 exports.noop = function noop(req, res, next) {
   res.json({
-    message: 'To Implemented!'
+    msg: 'To Implemented!'
   });
 };
 /**
@@ -31,7 +31,7 @@ exports.validateProfile = function validateProfile(req, res, next, id) {
 
     res.status(404).json({
       error: true,
-      message: "Not Found",
+      msg: "Not Found",
       status: 404
     });
 
@@ -45,7 +45,7 @@ exports.validateProfile = function validateProfile(req, res, next, id) {
         res.status(404)
           .json({
             error: true, status: 404,
-            message: 'profile _id ' + id + ' not fount'
+            msg: 'profile _id ' + id + ' not fount'
           });
       }
     });
@@ -91,7 +91,7 @@ exports.updateProfile = function updateProfile(req, res, next) {
       res.status(404);
       res.json({
         error: true,
-        message: 'Profile To Be Updated Not Found!',
+        msg: 'Profile To Be Updated Not Found!',
         status: 404
       });
       return;
@@ -123,7 +123,7 @@ exports.getByPagination = function getByPagination(req, res, next) {
       res.status(404),
         res.json({
           error: true,
-          message: "Requested Data is not found",
+          msg: "Requested Data is not found",
           status: 404
         }
         );

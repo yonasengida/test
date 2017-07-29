@@ -5,7 +5,7 @@ var moment      = require('moment');
 var StaffDal= require('../dal/staff');
 exports.noop = function noop (req, res, next) {
   res.json({
-    message: 'To Implemented!'
+    msg: 'To Implemented!'
   });
 };
 
@@ -29,7 +29,7 @@ exports.validateStaff = function validateStaff(req, res, next, id) {
 
     res.status(404).json({
       error: true,
-      message: "Not Found",
+      msg: "Not Found",
       status: 404
     });
 
@@ -43,7 +43,7 @@ exports.validateStaff = function validateStaff(req, res, next, id) {
         res.status(404)
           .json({
             error: true, status: 404,
-            message: 'Staff _id ' + id + ' not found'
+            msg: 'Staff _id ' + id + ' not found'
           });
       }
     });
@@ -65,7 +65,7 @@ exports.updateStaff = function updateStaff(req, res, next) {
       res.status(404);
       res.json({
         error: true,
-        message: 'Staff To Be Updated Not Found!',
+        msg: 'Staff To Be Updated Not Found!',
         status: 404
       });
       return;
@@ -117,7 +117,7 @@ exports.getByPagination = function getByPagination(req, res, next) {
       res.status(404),
         res.json({
           error: true,
-          message: "Requested Data is not found",
+          msg: "Requested Data is not found",
           status: 404
         }
         );

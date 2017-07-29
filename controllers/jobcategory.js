@@ -34,7 +34,7 @@ exports.validate = function validate(req, res, next) {
 
     res.status(404).json({
       error: true,
-      message: "Wrong Id",
+      msg: "Wrong Id",
       status: 404
     });
 
@@ -48,7 +48,7 @@ exports.validate = function validate(req, res, next) {
         res.status(404)
           .json({
             error: true, status: 404,
-            message: 'JobCategory _id ' + id + ' not found'
+            msg: 'JobCategory _id ' + id + ' not found'
           });
       }
     });

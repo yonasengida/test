@@ -11,7 +11,7 @@ var JobcategoryDal = require('../dal/jobcategory');
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
- * 
+ *
  */
 exports.noop = function (req, res, next) {
   res.json({
@@ -23,7 +23,7 @@ exports.noop = function (req, res, next) {
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
- * 
+ *
  */
 exports.validate = function validate(req, res, next, id) {
   debug("Validate Vacancy");
@@ -37,7 +37,7 @@ exports.validate = function validate(req, res, next, id) {
 
     res.status(404).json({
       error: true,
-      message: "Wrong Id",
+      msg: "Wrong Id",
       status: 404
     });
 
@@ -51,7 +51,7 @@ exports.validate = function validate(req, res, next, id) {
         res.status(404)
           .json({
             error: true, status: 404,
-            message: 'Vacancy _id ' + id + ' not found'
+            msg: 'Vacancy _id ' + id + ' not found'
           });
       }
     });
@@ -63,7 +63,7 @@ exports.validate = function validate(req, res, next, id) {
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
- * 
+ *
  */
 exports.createVacancy = function createVacancy(req, res, next) {
 console.log('check Input')
@@ -108,19 +108,19 @@ console.log(body);
         });
         return;
       } else {
-         
+
         workflow.emit('createVacancy');
       }
     });
 
   });
- 
+
   workflow.on('createVacancy', function createVacancy() {
      console.log('Create Vacancy')
     debug('Create Vacancy');
 
     VacancyDal.create(body, function createVacancy(err, doc) {
-    
+
       if (err) {
         return next(err);
       }
@@ -138,7 +138,7 @@ console.log(body);
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
- * 
+ *
  */
 exports.createVacancyAutoCodeGenerate = function createVacancyAutoCodeGenerate(req, res, next) {
 console.log('check Input')
@@ -170,10 +170,10 @@ workflow.emit('checkCodeDuplication');
       }
       if (doc._id) {
          workflow.emit('generateCode');
-       
+
         return;
       } else {
-         
+
         workflow.emit('validateInput');
       }
     });
@@ -181,7 +181,7 @@ workflow.emit('checkCodeDuplication');
   });
 
   workflow.on('validateInput', function validate() {
-    
+
     debug('Valdiate Vacncy Input')
     req.checkBody('code', 'Invalid Vacancy Code').notEmpty().withMessage('Code should not be Empty')
     req.checkBody('position', 'Invalid Position').notEmpty().withMessage('Position should not be Empty')
@@ -204,14 +204,14 @@ workflow.emit('checkCodeDuplication');
   workflow.emit('createVacancy');
   });
 
-  
- 
+
+
   workflow.on('createVacancy', function createVacancy() {
      console.log('Create Vacancy')
     debug('Create Vacancy');
 
     VacancyDal.create(body, function createVacancy(err, doc) {
-    
+
       if (err) {
         return next(err);
       }
@@ -228,7 +228,7 @@ workflow.emit('checkCodeDuplication');
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
- * 
+ *
  */
 exports.getVacancy = function getVacancy(req, res, next) {
   res.json(req.doc);
@@ -238,7 +238,7 @@ exports.getVacancy = function getVacancy(req, res, next) {
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
- * 
+ *
  */
 exports.getVacancies = function getVacancies(req, res, next) {
   var opt={};
@@ -254,7 +254,7 @@ exports.getVacancies = function getVacancies(req, res, next) {
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
- * 
+ *
  */
 exports.getOPenVacancies = function getOpenVacancies(req, res, next) {
   var opt='description due_date category qualifications exprience position level';
@@ -270,7 +270,7 @@ exports.getOPenVacancies = function getOpenVacancies(req, res, next) {
  * @param {req} HTTP Requst
  * @param {res} HTTP Response
  * @param {next} Middleware Dispatcher
- * 
+ *
  */
 exports.updateVacancy = function updateVacancy(req, res, next) {
   debug("Update Vacancy")
@@ -287,7 +287,7 @@ exports.updateVacancy = function updateVacancy(req, res, next) {
  * @param {req} HTTP Request
  * @param {res} HTTP Response
  * @param {next} MIddle Dispatcher
- * 
+ *
  */
 exports.getVacancysByPagination = function getVacancysByPagination(req, res, next) {
 
@@ -308,20 +308,17 @@ exports.getVacancysByPagination = function getVacancysByPagination(req, res, nex
   });
 }
 
-exports.search = function search(req, res, next) {
+exports.searchByStream = function searchByStream(req, res, next) {
   debug("Search");
-  
-      var exprienceFrom = req.query.from;
-      var exprienceTo = req.query.to;
-      var category = req.query.category;
-      var level = req.query.level;
-     var start_date = moment(req.query.start_date).toISOString();
-     var end_date = moment(req.query.start_date).toISOString();
-   //   console.log(moment(req.query.start_date).toISOString());
-      // var start_date = req.query.start_date;
-      // var end_date = req.query.end_date;
-      // if(!exprienceFrom ||!exprienceTo||!category||!level||!start_date||!end_date){
-       if(!exprienceFrom ||!exprienceTo||!category||!level){
+
+      var stream = req.query.stream;
+      // var exprienceTo = req.query.to;
+      // var category = req.query.category;
+      // var level = req.query.level;
+    //  var start_date = moment(req.query.start_date).toISOString();
+    //  var end_date = moment(req.query.start_date).toISOString();
+    //  if(!exprienceFrom ||!exprienceTo||!category||!level){
+       if(!stream){
           res.status(400);
           res.json({
               error:true,
@@ -330,15 +327,13 @@ exports.search = function search(req, res, next) {
           });
           return;
       }
-  
+
   VacancyDal.getCollection({
         $and: [
        { $or: [{ exprience: { $lte: exprienceTo } }, { exprience: true }] },
-    //   { $or: [{ due_date: { $gte:new Date('2013-12-12T16:00:00.000Z')} }, { due_date: true }] },
        { $or: [{ exprience: { $gt: exprienceFrom } }, { exprience: true }] },
        { $or: [{ category: true }, { category: category }] },
        { $or: [{ level: true }, { level: level }] },
-   
     ]
   },{}, function (err, doc) {
     if (err) {
@@ -350,10 +345,10 @@ exports.search = function search(req, res, next) {
 };
 exports.searchByCategory = function search(req, res, next) {
   debug("Search");
-  
-     
+
+
       var category = req.query.category;
-     
+
        if(!category){
           res.status(400);
           res.json({
@@ -369,7 +364,7 @@ exports.searchByCategory = function search(req, res, next) {
       // { $or: [{ exprience: { $gt: exprienceFrom } }, { exprience: true }] },
        { $or: [{ category: true }, { category: category }] },
        //{ $or: [{ level: true }, { level: level }] },
-   
+
     ]
   },{}, function (err, doc) {
     if (err) {
@@ -384,7 +379,7 @@ exports.searchByCategory = function search(req, res, next) {
  * Remove Users
  */
 exports.removeVacancy = function removeVacancy(req, res, next) {
-  
+
   VacancyDal.delete({ _id: req.doc._id }, function remove(err, doc){
 if(err){
   return next(err);

@@ -126,7 +126,7 @@ exports.createUser = function createUser(req, res, next) {
         res.status(409);
         res.json({
           error: true,
-          message: 'User Already Exist, Pelase try for other option!',
+          msg: 'User Already Exist, Pelase try for other option!',
           status: 409
         });
 
@@ -264,7 +264,7 @@ exports.getUser = function getUser(req, res, next) {
       res.status(404);
       res.json({
         error: true,
-        message: 'User Requested Not Found!',
+        msg: 'User Requested Not Found!',
         status: 404
       });
 
@@ -289,7 +289,7 @@ exports.updateUser = function updateUser(req, res, next) {
       res.status(404);
       res.json({
         error: true,
-        message: 'User To Be Updated Not Found!',
+        msg: 'User To Be Updated Not Found!',
         status: 404
       });
       return;
@@ -360,7 +360,7 @@ exports.passwordChange = function passwordChange(req, res, next) {
 
       if(!user._id){
         res.status(404);
-        res.json({message:"user is not found"});
+        res.json({msg:"user is not found"});
         return;
       }
       else{
@@ -376,7 +376,7 @@ exports.passwordChange = function passwordChange(req, res, next) {
       }
       if (!isOk) {
         res.status(403);
-        res.json({ message: "wrong password" });
+        res.json({ msg: "wrong password" });
         return;
       }
       else {
@@ -413,7 +413,7 @@ exports.passwordChange = function passwordChange(req, res, next) {
 
   });
   workflow.on('respond', function respond() {
-    res.json({ message: "Sucessfully changed." })
+    res.json({ msg: "Sucessfully changed." })
   });
   workflow.emit('validateInput');
 
@@ -439,7 +439,7 @@ exports.getByPagination = function getByPagination(req, res, next) {
       res.status(404),
         res.json({
           error: true,
-          message: "Requested Data is not found",
+          msg: "Requested Data is not found",
           status: 404
         }
         );
