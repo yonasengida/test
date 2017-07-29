@@ -279,6 +279,7 @@ router.get('/paginate',vacancy.getVacancysByPagination)
 ]
 */
 router.get('/search',vacancy.search)
+router.get('/searchbydate',vacancy.searchByDate)
 /**
  * @apiDescription This Endpoint is allow to Search Vacancies By Categroy
  * @api {get} /vacancies/searchByCategory?category=<parameter> Search Vacancies By Category

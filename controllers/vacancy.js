@@ -307,7 +307,32 @@ exports.getVacancysByPagination = function getVacancysByPagination(req, res, nex
     res.json(doc);
   });
 }
+exports.searchByDate = function searchByDate(req, res, next) {
 
+  debug("Search By Date");
+
+  var sdate = req.query.sdate;
+  var edate = req.query.edate;
+  
+  if (!sdate||!edate) {
+    res.status(400);
+    res.json({
+      error: true,
+      msg: "Query Parameter is required",
+      status: 400
+    });
+    return;
+  }
+  VacancyDal.getCollection(
+    {$and:[{due_date:{$lte:new Date(edate)}},{due_date:{$gte:new Date(sdate)}}]}
+   ,{}, function (err, doc) {
+    if (err) {
+      return next(err);
+    }
+    res.json(doc);
+  });
+
+};
 exports.search = function search(req, res, next) {
   debug("Search");
 
