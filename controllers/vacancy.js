@@ -37,7 +37,7 @@ exports.validate = function validate(req, res, next, id) {
 
     res.status(404).json({
       error: true,
-      msg: "Wrong Id",
+      message: "Wrong Id",
       status: 404
     });
 
@@ -51,7 +51,7 @@ exports.validate = function validate(req, res, next, id) {
         res.status(404)
           .json({
             error: true, status: 404,
-            msg: 'Vacancy _id ' + id + ' not found'
+            message: 'Vacancy _id ' + id + ' not found'
           });
       }
     });
@@ -308,17 +308,17 @@ exports.getVacancysByPagination = function getVacancysByPagination(req, res, nex
   });
 }
 
-exports.searchByStream = function searchByStream(req, res, next) {
+exports.search = function search(req, res, next) {
   debug("Search");
 
-      var stream = req.query.stream;
-      // var exprienceTo = req.query.to;
-      // var category = req.query.category;
-      // var level = req.query.level;
-    //  var start_date = moment(req.query.start_date).toISOString();
-    //  var end_date = moment(req.query.start_date).toISOString();
-    //  if(!exprienceFrom ||!exprienceTo||!category||!level){
-       if(!stream){
+      // var stream = req.query.stream;
+      var exprienceTo = req.query.to;
+      var category = req.query.category;
+      var level = req.query.level;
+     var start_date = moment(req.query.start_date).toISOString();
+     var end_date = moment(req.query.start_date).toISOString();
+     if(!exprienceFrom ||!exprienceTo||!category||!level){
+     //  if(!stream){
           res.status(400);
           res.json({
               error:true,
