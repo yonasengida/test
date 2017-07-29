@@ -338,10 +338,14 @@ exports.search = function search(req, res, next) {
 
       // var stream = req.query.stream;
       var exprienceTo = req.query.to;
+      var exprienceFrom = req.query.from;
+     // console.log(exprienceFrom);
       var category = req.query.category;
       var level = req.query.level;
-     var start_date = moment(req.query.start_date).toISOString();
-     var end_date = moment(req.query.start_date).toISOString();
+      var sdate = req.query.sdate;
+      var edate = req.query.edate;
+    // var start_date = moment(req.query.start_date).toISOString();
+    // var end_date = moment(req.query.start_date).toISOString();
      if(!exprienceFrom ||!exprienceTo||!category||!level){
      //  if(!stream){
           res.status(400);
@@ -359,6 +363,7 @@ exports.search = function search(req, res, next) {
        { $or: [{ exprience: { $gt: exprienceFrom } }, { exprience: true }] },
        { $or: [{ category: true }, { category: category }] },
        { $or: [{ level: true }, { level: level }] },
+       { $or: [{due_date:{$lte:new Date(edate)}},{due_date:{$gte:new Date(sdate)}}]}
     ]
   },{}, function (err, doc) {
     if (err) {
