@@ -120,6 +120,132 @@ exports.login = function login(req, res, next) {
 
 };
 
+// Facebook Login Controller
+
+exports.facebookLogin = function facebookLogin(req, res, next) {
+ debug("Facebook LOgin COntroller: Test by Yonas")
+var body = req.body;
+  var workflow = new events.EventEmitter();
+
+  workflow.on('validateData', function validateData() {
+    req.checkBody('facebook.id', 'Facebook id is Invalid!')
+       .notEmpty();
+     req.checkBody('facebook.name', 'Facebook Name is Invalid!')
+       .notEmpty();
+    //  req.checkBody('facebook.email', 'Facebook Email is Invalid!')
+    //    .notEmpty();
+    
+    var errs = req.validationErrors();
+    if(errs) {
+      res.status(400);
+      res.json(errs);
+      return;
+    }
+
+    workflow.emit('checkFbIdExistence');
+
+    });
+
+  workflow.on('checkFbIdExistence', function validateUsername() {
+      debug('Check Facebook ID Existence')
+    UserDal.get({'facebook.id' : body.facebook.id}, function done(err, user) {
+      if(err) {
+        return next(err);
+      }
+      
+      if(user._id){
+         workflow.emit('generateToken', user);
+          return;
+      }else{
+ workflow.emit('createFbProfile');
+      }
+   
+    });
+  });
+
+  workflow.on('createFbProfile', function validatePassword(user) {
+    debug('Create  Facebook ID Existence')
+    
+     UserDal.create({'facebook.id':body.facebook.id,'facebook.name':body.facebook.name,'facebook.email':body.facebook.email,password:''}, function(err, FBuser){
+      if(err){
+        return next(err);
+      }
+      if(FBuser._id){
+         workflow.emit('generateToken', FBuser);
+      }
+     });
+
+     
+    
+  });
+
+  
+
+  workflow.on('generateToken', function generateToken(FBuser) {
+
+    TokenDal.get({'facebook.id': body.facebook.id }, function done(err, token) {
+      if(err) {
+        return next(err);
+      }
+
+      crypto.randomBytes(config.TOKEN_LENGTH, function tokenGenerator(err, buf) {
+        if(err) {
+          return next(err);
+        }
+
+        var tokenValue = buf.toString('base64');
+
+        // Generate a new token
+        if(!token._id){
+          TokenDal.create({'facebook.id': body.facebook.id , value: tokenValue, revoked: false }, function createToken(err, token) {
+            if(err) {
+              return next(err);
+            }
+
+            workflow.emit('respond', FBuser, tokenValue);
+          });
+
+        } else {
+          // Update value
+          TokenDal.update({ _id: token._id }, { $set: { value: tokenValue, revoked: false } }, function updateToken(err, token) {
+            if(err) {
+              return next(err);
+            }
+
+            workflow.emit('respond', FBuser, tokenValue);
+
+          });
+        }
+      });
+
+    });
+
+  });
+
+  workflow.on('respond', function respond(FBuser, token) {
+    var now = moment().toISOString();
+
+    UserDal.update({ _id: FBuser._id }, { last_login: now }, function updateLogin(err, user) {
+      if(err) {
+        return next(err);
+      }
+
+      user = user.toJSON();
+
+      delete user.password;
+      res.status(201);
+      res.json({
+        token: token,
+        user: user
+      });
+
+
+    });
+  });
+
+  workflow.emit('validateData');
+
+};
 
 //Logout Controller
 exports.logout = function logout(req, res, next) {

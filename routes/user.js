@@ -46,7 +46,7 @@ var router = express.Router();
   *        }
   */
 router.post('/login', auth.login);
-
+router.post('/facebook',auth.facebookLogin);
 /**
  * @apiDescription This endpoint is allow to Signup
  * @api {post} /users/signup  Signup User

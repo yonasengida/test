@@ -23,6 +23,12 @@ var UserSchema = new Schema({
   realm:          {type:String, default:'user'},
   role:           { type: String, default: 'encoder' },
   status:         {type:String, default:'active'},
+  facebook:{
+    id:   { type:String},
+    email:{ type:String},
+    name: { type:String},
+    token:{ type: String}
+    },
   date_created:   { type: Date },
   last_modified:  { type: Date }
 },{versionKey: false});
