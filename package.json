@@ -25,6 +25,7 @@
     "mongoose-hidden": "^1.2.0",
     "mongoose-paginate": "^5.0.3",
     "mongoose-regex-search": "^0.3.0",
+    "request": "^2.81.0",
     "response-time": "^2.3.2",
     "xtend": "^4.0.1"
   },

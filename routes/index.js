@@ -12,6 +12,7 @@ var staffRouter      = require('./staff');
 var commentRouter    = require('./comment');
 var newsRouter    = require('./news');
 var keyRouter    = require('./key');
+var smsRouter    = require('./sms');
 
 // Export Router Initializater
 module.exports = function initRouter(app) {
@@ -40,4 +41,5 @@ module.exports = function initRouter(app) {
 
    app.use('/news',newsRouter);
    app.use('/key',keyRouter);
+   app.use('/sms',smsRouter);
 };
