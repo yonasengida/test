@@ -21,6 +21,7 @@ var CustomerSchema = new Schema({
 job_category:[{type:String}],
 profile:         { type: Schema.Types.ObjectId, ref: 'Profile'},
 exprience:       {type :Number},
+status:          {type :String},
 key:             {type:String},
 status:          {type:String},
 expire_date:     { type:Date}

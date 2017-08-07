@@ -401,10 +401,12 @@ exports.sellKey = function sellKey(req, res, next){
     workflow.emit('validateInput');
 };
 
+
+
+
 /**
  * This interface to activate cards only for mobile users
  */
-
 exports.activateKey = function activateKey(req, res, next){
 // here is to active 
 
@@ -416,7 +418,6 @@ exports.activateKey = function activateKey(req, res, next){
     // Validate Input Here
    workflow.on('validateInput', function validate() {
         debug('validate  Input');
-
         req.checkBody('key', 'Key  should not be empty!')
         .notEmpty();
         req.checkBody('customer_level', 'Customer Level  should not be empty!')
@@ -455,7 +456,7 @@ exports.activateKey = function activateKey(req, res, next){
                             if(err){
                                 return next(err);
                             }
-                            res.json({msg:"Sucess Fully SOLD",key:doc});
+                            res.json({msg:"Sucess Fully Activated",key:doc});
                         });
                     
                 });
@@ -466,7 +467,7 @@ exports.activateKey = function activateKey(req, res, next){
                 if(err){
                     return next(err);
                 }
-            //  if()
+           
                 res.json({msg:"ok level 3"});
             });
         }else if(customerLevel >=4){

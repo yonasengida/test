@@ -213,7 +213,8 @@ exports.createUser = function createUser(req, res, next) {
       CustomerDal.create({
         profile: profile._id,
         date_created: now,
-        last_modified: now
+        last_modified: now,
+        status:'inactive'
       }, function callback2(err, customer) {
         if (err) {
           return next(err);
