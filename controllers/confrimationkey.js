@@ -19,7 +19,7 @@ var CustomerDal = require('../dal/customer');
  */
 exports.noop = function (req, res, next) {
     res.json({
-        msg: "To Be Implemeted"
+        msg: "To Be Impl  emeted"
     });
 };
 /**
@@ -444,7 +444,10 @@ exports.activateKey = function activateKey(req, res, next){
                 }
                 console.log(doc);
                 if(!doc._id){
-                res.json({error:true,msg:"sorry the key is not found or Sold before", status:404});
+                      res.status(404);
+                      res.json({error:true,
+                      msg:"sorry the key is not found or Sold before",
+                      status:404});
                 return;
                 }
                 // res.json({msg:"ok level 1"});
@@ -456,7 +459,10 @@ exports.activateKey = function activateKey(req, res, next){
                             if(err){
                                 return next(err);
                             }
-                            res.json({msg:"Sucess Fully Activated",key:doc});
+                            res.status(200)
+                            res.json({error:false,
+                                msg:"Sucessfully Activated",key:doc,
+                                status:200});
                         });
                     
                 });

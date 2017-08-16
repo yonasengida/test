@@ -23,6 +23,7 @@ var UserSchema = new Schema({
   realm:          {type:String, default:'user'},
   role:           { type: String, default: 'encoder' },
   status:         {type:String, default:'active'},
+  facebookId: { type:String},
   facebook:{
     id:   { type:String},
     email:{ type:String},
