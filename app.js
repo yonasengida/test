@@ -11,7 +11,7 @@ var authenticate = require('./lib/authenticate');
 
 
 //lets require/import the mongodb native drivers.
-var mongodb = require('mongodb');
+// var mongodb = require('mongodb');
 
 //var authorize = require('./lib/authorize');
 
