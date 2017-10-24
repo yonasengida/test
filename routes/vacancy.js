@@ -64,6 +64,25 @@ var router = express.Router();
 
 router.post('/', vacancy.createVacancyAutoCodeGenerate);
 /**
+ * @apiDescription This Endpoint is allow to create Vacancy Into SMS DB
+ * @api {post} /vacancies/SMS  Create SMSVacancy
+ * @apiName CreateSMSVacancy
+ * @apiGroup Vacancy
+ *
+ *
+
+ * @apiParam {String} title Title for vacancy
+ * @apiParam {String} description Vacancy Description 
+ * @apiParam {String} job_category Vacancy Job Category
+ * @apiParam {String} exprience Exprience
+ * @apiParam {Date}   due_date Vacancy Due Date
+ * @apiParam {String} qualification Qualification
+ * @apiParam {String} phone  Mobile 
+ * @apiParam {String} level Level Like Diploma,Degree or Msc.
+ * 
+*/
+router.post('/SMS', vacancy.createVacancyIntoMYSQL);
+/**
  * @apiDescription This Endpoint is allow to get all vacancy collections.
  * @api {get} /vacancies  Get all Vacancy
  * @apiName GetVacancies

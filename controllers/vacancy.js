@@ -2,6 +2,7 @@
 'use strict';
 var event = require('events');
 var moment = require('moment');
+var mysql  = require('mysql');
 var debug = require('debug')('eagles-api:vacancy-controller')
 var VacancyDal = require('../dal/vacancy');
 var JobcategoryDal = require('../dal/jobcategory');
@@ -324,7 +325,8 @@ exports.searchByDate = function searchByDate(req, res, next) {
     return;
   }
   VacancyDal.getCollection(
-    {$and:[{due_date:{$lte:new Date(edate)}},{due_date:{$gte:new Date(sdate)}}]}
+    // {$and:[{due_date:{$lte:new Date(edate)}},{due_date:{$gte:new Date(sdate)}}]}
+    {$and:[{created_at:{$lte:new Date(edate)}},{created_at:{$gte:new Date(sdate)}}]}
    ,{}, function (err, doc) {
     if (err) {
       return next(err);
@@ -350,7 +352,7 @@ exports.search = function search(req, res, next) {
      //  if(!stream){
           res.status(400);
           res.json({
-              error:true,
+              error:trfue,
               msg:"Query Parameter is required",
               status:400
           });
@@ -360,10 +362,11 @@ exports.search = function search(req, res, next) {
   VacancyDal.getCollection({
         $and: [
        { $or: [{ exprience: { $lte: exprienceTo } }, { exprience: true }] },
-       { $or: [{ exprience: { $gt: exprienceFrom } }, { exprience: true }] },
-       { $or: [{ category: true }, { category: category }] },
+       { $or: [{ exprience: { $gte: exprienceFrom } }, { exprience: true }] },
+       { $or: [{ category: true }, { category: {$regex: category, $options:"$i"} }] },
        { $or: [{ level: true }, { level: level }] },
-       { $or: [{due_date:{$lte:new Date(edate)}},{due_date:{$gte:new Date(sdate)}}]}
+       {$and:[{created_at:{$lte:new Date(edate)}},{created_at:{$gte:new Date(sdate)}}]}
+      // { $or: [{created_at:{$lte:new Date(edate)}},{created_at:{$gte:new Date(sdate)}}]}
     ]
   },{}, function (err, doc) {
     if (err) {
@@ -415,5 +418,48 @@ if(err){
   return next(err);
 }
 res.json(doc);
+  });
+};
+
+exports.createVacancyIntoMYSQL = function createVacancyIntoMYSQL(req,res,next){
+var body= req.body;
+   debug('Valdiate Vacncy Input')
+       req.checkBody('title', 'Invalid title').notEmpty().withMessage('Title should not be Empty')
+       req.checkBody('qualifications', 'Invalid qualification').notEmpty().withMessage('qualification should not be Empty')
+       req.checkBody('description', 'Invalid Description').notEmpty().withMessage('Description should not be Empty')
+       req.checkBody('job_category', 'Invalid Job Category').notEmpty().withMessage('Job Category should not be Empty')
+       req.checkBody('exprience', 'Invalid  Exprience').notEmpty().withMessage('Exprience should not be Empty')
+       req.checkBody('due_date', 'Invalid  Due Date').notEmpty().withMessage('Due Date should not be Empty')
+       req.checkBody('level', 'Invalid Level').notEmpty().withMessage('Level should not be Empty')
+       req.checkBody('phone', 'Invalid Phone').notEmpty().withMessage('Phone should not be Empty')
+       
+      if(req.validationErrors()){
+          res.status(400);
+          res.json({
+              error:true,
+              msg:req.validationErrors(),
+              status:400
+          });
+        return;
+      }
+  var con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "root@123",
+    database: "eagles"
+  });
+
+  con.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    var sql = "INSERT INTO jobPosts  VALUES (NULL,'"+body.title+"', '"+body.qualifications+"','"+body.exprience+"','"+body.description+"','"+body.phone+"','"+body.due_date+"','"+body.job_category+"','"+body.level+"','')";
+    con.query(sql, function (err, result) {
+      if (err){
+        res.json(err);
+        return;
+      }
+       res.json(result);
+    });
   });
 };
