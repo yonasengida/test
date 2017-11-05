@@ -95,6 +95,11 @@ exports.createUser = function createUser(req, res, next) {
       .notEmpty().withMessage('User Type should not be Empty')
 
       .isIn(['staff', 'customer']).withMessage('User Type should either be customer or staff');
+    req.checkBody('role', 'Role is Invalid!')
+          .notEmpty().withMessage('Role should not be Empty')
+
+          .isIn(['admin', 'agent','encoder']).withMessage('Role should  be admin,agent or encoder');
+
     if(body.user_type==='customer'){
       req.checkBody('mobile')
       .notEmpty().withMessage('Mobile Should not be Empty');
@@ -143,8 +148,8 @@ exports.createUser = function createUser(req, res, next) {
     UserDal.create({
       password: body.password,
       user_name: body.user_name,
-      role: body.user_type,
-      realm: body.realm ? body.realm : 'user'
+      role: body.role,
+      realm: body.user_type
 
     }, function callback(err, user) {
       if (err) {

@@ -8,6 +8,7 @@ var search      = require('express-partial-response');
 var config      = require('./config');
 var router      = require('./routes');
 var authenticate = require('./lib/authenticate');
+var cors       = require('cors');
 
 
 //lets require/import the mongodb native drivers.
@@ -31,13 +32,12 @@ mongoose.connection.on('error', function mongodbErrorListener() {
  // mongoose.connect(config.MONGODB_UR, { useMongoClient: true, /* other options */ })
 
 });
-
 // Initialize app
 var app = express();
 app.use(express.static('docs'))
-
+app.use(cors(config.CORS_OPTS));
 // //Authentication Middleware
-app.use(authenticate({set_auth:false}).unless({
+app.use(authenticate({set_auth:true}).unless({
   path: ['/users/login', '/users/signup','/vacancies/open','/comments','/news','/key/activate','customers/category']
 }));
 
@@ -50,13 +50,13 @@ app.use(search());
 // Set Validator
 app.use(validator());
 //CORS -enable cross-origin resource sharing
-app.use(function (req, res, next) {
-  // res.config.COR
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  next();
-});
+// app.use(function (req, res, next) {
+//   // res.config.COR
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+//   next();
+// });
 
 // Set Routes
 router(app);

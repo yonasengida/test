@@ -298,6 +298,7 @@ router.get('/paginate',vacancy.getVacancysByPagination)
 ]
 */
 router.get('/search',vacancy.search)
+router.get('/searchbycode',vacancy.searchByCode)
 router.get('/searchbydate',vacancy.searchByDate)
 /**
  * @apiDescription This Endpoint is allow to Search Vacancies By Categroy

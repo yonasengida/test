@@ -39,7 +39,7 @@ var VacancySchema = new Schema({
     level:          { type:String},
     created_by:     { type:Schema.Types.ObjectId, ref:'User'},
     Updated_by:     { type:Schema.Types.ObjectId, ref:'User'},
-    created_at:     { type:Date,default:new Date()},
+    created_at:     { type:Date},
     updated_at:     { type: Date}
 },{versionKey: false},{
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at'}

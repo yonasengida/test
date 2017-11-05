@@ -9,7 +9,7 @@ var bcrypt    = require('bcryptjs');
 var config    = require('../config');
 var moment    = require('moment');
 
-var hidden    = require('mongoose-hidden')();
+// var hidden    = require('mongoose-hidden')();
 var paginate  = require('mongoose-paginate');
 
 var Schema = mongoose.Schema;
@@ -18,7 +18,7 @@ var Schema = mongoose.Schema;
 var UserSchema = new Schema({
   profile:        { type: mongoose.Schema.Types.ObjectId, ref: 'Profile'},
   user_name:      { type: String },
-  password:       { type: String , hide: true},
+  password:       { type: String },
   last_login:     { type: Date },
   realm:          {type:String, default:'user'},
   role:           { type: String, default: 'encoder' },
@@ -34,7 +34,7 @@ var UserSchema = new Schema({
   last_modified:  { type: Date }
 },{versionKey: false});
 
-UserSchema.plugin(hidden);
+// UserSchema.plugin(hidden);
 UserSchema.plugin(paginate);
 
 // Add a pre save hook

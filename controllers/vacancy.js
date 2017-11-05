@@ -119,7 +119,7 @@ console.log(body);
   workflow.on('createVacancy', function createVacancy() {
      console.log('Create Vacancy')
     debug('Create Vacancy');
-
+    console.log(body);
     VacancyDal.create(body, function createVacancy(err, doc) {
 
       if (err) {
@@ -211,6 +211,8 @@ workflow.emit('checkCodeDuplication');
      console.log('Create Vacancy')
     debug('Create Vacancy');
 
+body.created_at=moment().toISOString();
+console.log(body);
     VacancyDal.create(body, function createVacancy(err, doc) {
 
       if (err) {
@@ -242,6 +244,7 @@ exports.getVacancy = function getVacancy(req, res, next) {
  *
  */
 exports.getVacancies = function getVacancies(req, res, next) {
+  // console.log(req._user);
   var opt={};
   VacancyDal.getCollection({},opt, function getAllVacancy(err, docs) {
     if (err) {
@@ -360,7 +363,7 @@ exports.search = function search(req, res, next) {
       }
 
   VacancyDal.getCollection({
-        $and: [
+      $and: [
        { $or: [{ exprience: { $lte: exprienceTo } }, { exprience: true }] },
        { $or: [{ exprience: { $gte: exprienceFrom } }, { exprience: true }] },
        { $or: [{ category: true }, { category: {$regex: category, $options:"$i"} }] },
@@ -372,6 +375,29 @@ exports.search = function search(req, res, next) {
     if (err) {
       return next(err);
     }
+    res.json(doc);
+    });
+
+};
+exports.searchByCode = function search(req, res, next) {
+  debug("Search By Code");
+
+
+      var code = req.query.code;
+
+       if(!code){
+          res.status(400);
+          res.json({
+              error:true,
+              msg:"Query Parameter is required",
+              status:400
+          });
+          return;
+      }
+  VacancyDal.get({code:code}, function (err, doc) {
+    if (err) {
+      return next(err);
+    }3
     res.json(doc);
     });
 

@@ -107,7 +107,7 @@ exports.login = function login(req, res, next) {
                 res.json({
                     token: tokenValue,
                     user: doc,
-                    level:doc.customer.job_category.length
+                    // level:doc.customer.category.length
                 });
             
             });
